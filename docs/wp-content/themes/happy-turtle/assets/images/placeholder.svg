@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Photo placeholder">
+	<!-- Warm neutral, deliberately distinct from cream / sand / sage-mist so the
+	     slot stays visible whichever section background sits behind it. -->
+	<rect width="800" height="600" fill="#E6E1D6"/>
+	<rect x="1" y="1" width="798" height="598" fill="none" stroke="#6F8A55" stroke-width="2" opacity="0.28"/>
+	<g fill="none" stroke="#6F8A55" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.5">
+		<rect x="288" y="222" width="224" height="164" rx="12"/>
+		<circle cx="346" cy="274" r="18"/>
+		<path d="M294 352l60-54 46 42 42-36 68 60"/>
+	</g>
+</svg>
