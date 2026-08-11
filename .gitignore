@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+._*
+
+# Local WordPress sandbox (never part of the deliverable)
+wp/
+*.sqlite
+wp-config.php
+debug.log

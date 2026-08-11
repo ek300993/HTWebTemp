@@ -1,0 +1,224 @@
+/*
+Theme Name: Happy Turtle
+Theme URI: https://happyturtlecustomgifts.com
+Author: Happy Turtle Custom Gifts
+Author URI: https://happyturtlecustomgifts.com
+Description: A warm, handmade block theme for a small gift-basket studio. Built on core WordPress blocks only — colours, type and spacing all live in theme.json, and every page section ships as an editable block pattern.
+Version: 1.0.0
+Requires at least: 6.6
+Tested up to: 6.8
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: happy-turtle
+Tags: block-theme, full-site-editing, one-column, two-columns, custom-colors, custom-menu, custom-logo, featured-images, block-patterns
+*/
+
+/* -------------------------------------------------------------------------
+ * Almost everything visual is defined in theme.json. This file is only for
+ * the handful of things theme.json cannot express: block style variations,
+ * decorative pseudo-elements, and a couple of graceful-degradation rules.
+ * ---------------------------------------------------------------------- */
+
+
+/* --- Block style: Heart Divider (core/paragraph) -------------------------
+ * The small "— ♥ —" rule that sits under section headings.
+ * ---------------------------------------------------------------------- */
+.is-style-heart-divider {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+	color: var(--wp--preset--color--green-light);
+	font-size: 0.75rem;
+	line-height: 1;
+	margin-block: var(--wp--preset--spacing--sm);
+}
+
+.is-style-heart-divider::before,
+.is-style-heart-divider::after {
+	content: "";
+	display: block;
+	width: 42px;
+	height: 1px;
+	background: currentColor;
+	opacity: 0.45;
+}
+
+
+/* --- Block style: Handwritten (core/paragraph, core/heading) ------------- */
+.is-style-script {
+	font-family: var(--wp--preset--font-family--script);
+	font-size: var(--wp--preset--font-size--lg);
+	line-height: 1.4;
+	color: var(--wp--preset--color--green);
+}
+
+
+/* --- Block style: Eyebrow Label (core/paragraph) ------------------------- */
+.is-style-eyebrow {
+	font-family: var(--wp--preset--font-family--body);
+	font-size: var(--wp--preset--font-size--xs);
+	font-weight: 500;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--green-light);
+	margin-bottom: var(--wp--preset--spacing--xs);
+}
+
+
+/* --- Block style: Plain list (core/list) -------------------------------- */
+.is-style-plain {
+	list-style: none;
+	padding-left: 0;
+}
+
+
+/* --- Decorative icons used in the value-prop and about sections ---------- */
+.ht-icon {
+	display: inline-flex;
+	color: var(--wp--preset--color--green-light);
+}
+
+.ht-icon svg {
+	display: block;
+}
+
+
+/* --- Value-prop strip: hairline dividers between items ------------------- */
+@media (min-width: 782px) {
+	.ht-divided > * + * {
+		border-left: 1px solid rgba(79, 99, 55, 0.18);
+	}
+}
+
+
+/* --- Category + gift tiles ---------------------------------------------- */
+.ht-tile img {
+	transition: transform 400ms ease, opacity 400ms ease;
+}
+
+.ht-tile:hover img {
+	transform: scale(1.03);
+	opacity: 0.92;
+}
+
+.ht-tile figure {
+	overflow: hidden;
+	border-radius: 4px;
+}
+
+
+/* --- Stacked header ------------------------------------------------------
+ * Once the logo can no longer sit beside the menu it drops onto its own row,
+ * and a left-aligned logo above a left-aligned menu reads as broken. Below the
+ * breakpoint the header stacks deliberately and centres both rows.
+ *
+ * 900px is where the row genuinely runs out of space: logo (190px) + gap (24px)
+ * + menu and CTA (~636px) + root padding (48px). Setting flex-basis to 100%
+ * here means the breakpoint *causes* the stack rather than racing it, so there
+ * is no width at which the header is wrapped but still left-aligned.
+ *
+ * The hamburger appears at core's own 600px breakpoint, comfortably inside this
+ * range, so the logo is centred whenever the hamburger is showing too.
+ *
+ * If menu items are added, raise this number to match the wider menu.
+ * ---------------------------------------------------------------------- */
+@media (max-width: 900px) {
+	.ht-header-inner {
+		justify-content: center;
+		text-align: center;
+	}
+
+	.ht-header-inner > .wp-block-site-logo {
+		flex: 0 0 100%;
+		display: flex;
+		justify-content: center;
+	}
+
+	.ht-header-nav {
+		flex: 0 0 100%;
+		justify-content: center;
+	}
+}
+
+
+/* --- Page title banner ---------------------------------------------------
+ * Interior pages drop the title band straight onto the first content section,
+ * and the palette is deliberately low-contrast, so the seam can disappear:
+ * Reviews is sand on sand (identical), About is sand on sage (one shade apart).
+ * A hairline gives the boundary somewhere to land without introducing a hard
+ * colour step the design doesn't want. Same value as the value-prop dividers,
+ * so it reads as one device rather than a new one.
+ * ---------------------------------------------------------------------- */
+.ht-page-header {
+	border-bottom: 1px solid rgba(79, 99, 55, 0.18);
+}
+
+
+/* --- Navigation: underline the page you're on --------------------------- */
+.wp-block-navigation .wp-block-navigation-item.current-menu-item > a {
+	box-shadow: inset 0 -1px 0 0 currentColor;
+}
+
+
+/* --- Images ------------------------------------------------------------
+ * Patterns ship pointing at assets/images/placeholder.svg. WordPress strips
+ * <img> tags with no src entirely, so an empty image block collapses the
+ * column to zero height — a real placeholder file is the only way to keep an
+ * unfinished site looking intentional. The owner replaces them in the editor.
+ * ---------------------------------------------------------------------- */
+.wp-block-image img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 4px;
+}
+
+
+/* --- Full-bleed sections sit flush ---------------------------------------
+ * Each section pattern carries its own vertical padding, so the root blockGap
+ * between two adjacent full-width bands shows up as an unwanted stripe of page
+ * background between them. Only collapse the gap where two full-bleed sections
+ * actually meet — normal content spacing inside a page is untouched.
+ * ---------------------------------------------------------------------- */
+.wp-block-post-content > .alignfull + .alignfull,
+.wp-block-post-content > .alignfull:first-child,
+main > .alignfull + .alignfull {
+	margin-block-start: 0;
+}
+
+.wp-block-post-content > .alignfull:last-child,
+main > .alignfull:last-child {
+	margin-block-end: 0;
+}
+
+/* Header/footer template parts meet the page body flush too. */
+.wp-site-blocks > header + main,
+.wp-site-blocks > main + footer {
+	margin-block-start: 0;
+}
+
+/*
+ * page.html wraps the content in a padded group so ordinary text pages get
+ * breathing room. Pages assembled entirely from full-bleed patterns don't want
+ * it — that padding shows as a stripe of page background above the first band.
+ * Drop it only when a full-bleed section is actually the first/last thing in
+ * the content. !important because block spacing is emitted as an inline style.
+ */
+main > *:has(> .wp-block-post-content > .alignfull:first-child) {
+	padding-top: 0 !important;
+	margin-block-start: 0 !important;
+}
+
+main > *:has(> .wp-block-post-content > .alignfull:last-child) {
+	padding-bottom: 0 !important;
+	margin-block-end: 0 !important;
+}
+
+
+/* --- Editor-only nicety: give locked patterns a little breathing room ---- */
+.editor-styles-wrapper .is-style-heart-divider::before,
+.editor-styles-wrapper .is-style-heart-divider::after {
+	flex: 0 0 42px;
+}

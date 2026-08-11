@@ -1,0 +1,38 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "landingPage": "/",
+  "preferredVersions": {
+    "php": "8.3",
+    "wp": "latest"
+  },
+  "features": {
+    "networking": true
+  },
+  "login": true,
+  "steps": [
+    {
+      "step": "installPlugin",
+      "pluginData": {
+        "resource": "url",
+        "url": "https://raw.githubusercontent.com/ek300993/HTWebTemp/main/demo/happy-turtle-gifts.zip"
+      },
+      "options": {
+        "activate": true
+      }
+    },
+    {
+      "step": "installTheme",
+      "themeData": {
+        "resource": "url",
+        "url": "https://raw.githubusercontent.com/ek300993/HTWebTemp/main/demo/happy-turtle.zip"
+      },
+      "options": {
+        "activate": true
+      }
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php\nrequire_once '/wordpress/wp-load.php';\nrequire_once ABSPATH . 'wp-admin/includes/image.php';\nrequire_once ABSPATH . 'wp-admin/includes/file.php';\nrequire_once ABSPATH . 'wp-admin/includes/media.php';\n\n/**\n * Copy an image out of the theme into the media library.\n *\n * @param string $file  Filename inside the theme's assets/images directory.\n * @param string $title Attachment title.\n * @return int Attachment ID, or 0 on failure.\n */\nfunction htdemo_attach( $file, $title ) {\n\n\t$src = get_theme_file_path( 'assets/images/' . $file );\n\tif ( ! file_exists( $src ) ) {\n\t\treturn 0;\n\t}\n\n\t$uploads = wp_upload_dir();\n\t$dest    = trailingslashit( $uploads['path'] ) . $file;\n\n\tif ( ! copy( $src, $dest ) ) {\n\t\treturn 0;\n\t}\n\n\t$id = wp_insert_attachment(\n\t\tarray(\n\t\t\t'post_mime_type' => 'image/' . ( 'png' === pathinfo( $file, PATHINFO_EXTENSION ) ? 'png' : 'jpeg' ),\n\t\t\t'post_title'     => $title,\n\t\t\t'post_status'    => 'inherit',\n\t\t),\n\t\t$dest\n\t);\n\n\tif ( is_wp_error( $id ) || ! $id ) {\n\t\treturn 0;\n\t}\n\n\twp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $dest ) );\n\tupdate_post_meta( $id, '_wp_attachment_image_alt', $title );\n\n\treturn (int) $id;\n}\n\n// --- Logo -----------------------------------------------------------------\n$logo = htdemo_attach( 'logo.png', 'Happy Turtle Custom Gifts' );\nif ( $logo ) {\n\tset_theme_mod( 'custom_logo', $logo );\n\tupdate_option( 'site_logo', $logo );\n}\n\n// --- Baskets --------------------------------------------------------------\n$sizes = '<!-- wp:heading {\"fontSize\":\"lg\"} --><h2 class=\"wp-block-heading has-lg-font-size\">Size &amp; Price Guide</h2><!-- /wp:heading -->'\n\t. '<!-- wp:list --><ul class=\"wp-block-list\"><li>Small \u2014 from $65</li><li>Medium \u2014 from $95</li><li>Large \u2014 from $130</li></ul><!-- /wp:list -->';\n\n$baskets = array(\n\tarray(\n\t\t'title'    => 'Welcome Baby Basket',\n\t\t'slug'     => 'welcome-baby-basket',\n\t\t'excerpt'  => 'For the whole new family',\n\t\t'occasion' => 'new-baby',\n\t\t'image'    => 'new-baby-letterboard.jpg',\n\t\t'intro'    => 'A basket for the announcement moment \u2014 something for the baby, something for the parents, and a personalised letterboard for the photo everyone ends up taking.',\n\t\t'items'    => array( 'Personalised letterboard with the arrival details', 'Knitted blanket', 'Plush giraffe and elephant', 'Bodysuit and bib set', 'Hooded towel' ),\n\t),\n\tarray(\n\t\t'title'    => 'Personalised New Baby Basket',\n\t\t'slug'     => 'personalised-new-baby-basket',\n\t\t'excerpt'  => 'Named, and made to keep',\n\t\t'occasion' => 'new-baby',\n\t\t'image'    => 'new-baby-elephant.jpg',\n\t\t'intro'    => \"Built inside a rope basket with the baby's name appliqued on the front, so the basket itself becomes the keepsake long after the contents are used up.\",\n\t\t'items'    => array( 'Rope storage basket with appliqued name', 'Plush blanket', 'Personalised bib and swaddle', 'Wooden name hangers', 'Treats for the parents' ),\n\t),\n\tarray(\n\t\t'title'    => 'Housewarming Basket',\n\t\t'slug'     => 'housewarming-basket',\n\t\t'excerpt'  => 'For a brand new front door',\n\t\t'occasion' => 'new-home',\n\t\t'image'    => 'new-home-welcome.jpg',\n\t\t'intro'    => 'Everything that makes a new place feel lived in on the first night, with a few things from around the neighbourhood so it feels like a proper welcome.',\n\t\t'items'    => array( 'Fringed throw blanket', 'Champagne and chocolate bark', 'Local tote and neighbourhood guide', 'Potted succulent', 'Personalised letterboard' ),\n\t),\n\tarray(\n\t\t'title'    => 'Graduation Crate',\n\t\t'slug'     => 'graduation-crate',\n\t\t'excerpt'  => 'Off to be amazing',\n\t\t'occasion' => 'graduation',\n\t\t'image'    => 'graduation-crate.jpg',\n\t\t'intro'    => 'A wooden crate rather than a basket, so it stands up on a desk in a dorm room. Personalised tumbler, a few practical things, and a letterboard for the photos.',\n\t\t'items'    => array( 'Personalised insulated tumbler', 'Congrats Grad letterboard', 'Handmade zip pouch', 'Journal and pens', 'Chocolate treats' ),\n\t),\n\tarray(\n\t\t'title'    => 'Class of 2026 Basket',\n\t\t'slug'     => 'class-of-2026-basket',\n\t\t'excerpt'  => 'The tassel was worth the hassle',\n\t\t'occasion' => 'graduation',\n\t\t'image'    => 'graduation-class-2026.jpg',\n\t\t'intro'    => 'A softer take on the graduation basket \u2014 a Class of 2026 bear, a personalised rope basket, and a letterboard ready for the photo.',\n\t\t'items'    => array( 'Class of 2026 embroidered bear', 'Personalised rope basket', 'Journal with keepsake ribbon', 'Celebration letterboard', 'Chocolate treats' ),\n\t),\n);\n\nforeach ( $baskets as $b ) {\n\n\tif ( get_page_by_path( $b['slug'], OBJECT, 'basket' ) ) {\n\t\tcontinue;\n\t}\n\n\t$list = '';\n\tforeach ( $b['items'] as $item ) {\n\t\t$list .= '<li>' . $item . '</li>';\n\t}\n\n\t$content = '<!-- wp:paragraph --><p>' . $b['intro'] . '</p><!-- /wp:paragraph -->'\n\t\t. '<!-- wp:heading {\"fontSize\":\"lg\"} --><h2 class=\"wp-block-heading has-lg-font-size\">What Went Inside</h2><!-- /wp:heading -->'\n\t\t. '<!-- wp:list --><ul class=\"wp-block-list\">' . $list . '</ul><!-- /wp:list -->'\n\t\t. $sizes;\n\n\t$id = wp_insert_post(\n\t\tarray(\n\t\t\t'post_type'    => 'basket',\n\t\t\t'post_status'  => 'publish',\n\t\t\t'post_title'   => $b['title'],\n\t\t\t'post_name'    => $b['slug'],\n\t\t\t'post_excerpt' => $b['excerpt'],\n\t\t\t'post_content' => $content,\n\t\t)\n\t);\n\n\tif ( is_wp_error( $id ) || ! $id ) {\n\t\tcontinue;\n\t}\n\n\twp_set_object_terms( $id, $b['occasion'], 'basket_occasion' );\n\n\t$att = htdemo_attach( $b['image'], $b['title'] );\n\tif ( $att ) {\n\t\tset_post_thumbnail( $id, $att );\n\t}\n}\n\n// --- Site settings --------------------------------------------------------\nupdate_option( 'blogname', 'Happy Turtle Custom Gifts' );\nupdate_option( 'blogdescription', 'Beautifully curated gift baskets' );\nupdate_option( 'permalink_structure', '/%postname%/' );\n\n$home = get_page_by_path( 'home' );\nif ( $home ) {\n\tupdate_option( 'show_on_front', 'page' );\n\tupdate_option( 'page_on_front', $home->ID );\n}\n\nflush_rewrite_rules();\n\necho \"seeded\\n\";\n"
+    }
+  ]
+}

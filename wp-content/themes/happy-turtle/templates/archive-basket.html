@@ -1,0 +1,49 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"main","layout":{"type":"default"}} -->
+<main class="wp-block-group"><!-- wp:group {"align":"full","className":"ht-page-header","style":{"spacing":{"padding":{"top":"var:preset|spacing|xl","bottom":"var:preset|spacing|xl"}}},"backgroundColor":"sand","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull ht-page-header has-sand-background-color has-background" style="padding-top:var(--wp--preset--spacing--xl);padding-bottom:var(--wp--preset--spacing--xl)"><!-- wp:paragraph {"align":"center","className":"is-style-eyebrow"} -->
+<p class="has-text-align-center is-style-eyebrow">Handmade &amp; Custom</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:query-title {"type":"archive","textAlign":"center","showPrefix":false,"fontSize":"xxl"} /-->
+
+<!-- wp:paragraph {"align":"center","className":"is-style-heart-divider"} -->
+<p class="has-text-align-center is-style-heart-divider">♥</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:term-description {"textAlign":"center","textColor":"ink-soft","fontSize":"sm"} /-->
+
+<!-- wp:paragraph {"align":"center","textColor":"ink-soft","fontSize":"sm"} -->
+<p class="has-text-align-center has-ink-soft-color has-text-color has-sm-font-size">Every basket is made to order. These are examples of baskets I've built — yours will be put together around your occasion, your budget and the person receiving it.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+
+<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|xl","bottom":"var:preset|spacing|xxl"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--xl);padding-bottom:var(--wp--preset--spacing--xxl)"><!-- wp:query {"queryId":0,"query":{"perPage":12,"pages":0,"offset":0,"postType":"basket","order":"asc","orderBy":"title","inherit":true},"align":"wide","layout":{"type":"default"}} -->
+<div class="wp-block-query alignwide"><!-- wp:post-template {"className":"ht-tile","style":{"spacing":{"blockGap":"var:preset|spacing|lg"}},"layout":{"type":"grid","minimumColumnWidth":"15rem"}} -->
+<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"1","style":{"border":{"radius":"4px"}}} /-->
+
+<!-- wp:post-title {"textAlign":"center","level":2,"isLink":true,"style":{"spacing":{"margin":{"top":"var:preset|spacing|sm"}}},"fontSize":"md"} /-->
+
+<!-- wp:post-excerpt {"textAlign":"center","showMoreOnNewLine":false,"excerptLength":18} /-->
+<!-- /wp:post-template -->
+
+<!-- wp:query-no-results -->
+<!-- wp:paragraph {"align":"center","textColor":"ink-soft"} -->
+<p class="has-text-align-center has-ink-soft-color has-text-color">No baskets in here yet. Add one under <strong>Baskets → Add New</strong>.</p>
+<!-- /wp:paragraph -->
+<!-- /wp:query-no-results -->
+
+<!-- wp:query-pagination {"paginationArrow":"arrow","layout":{"type":"flex","justifyContent":"center"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|xl"}}}} -->
+<!-- wp:query-pagination-previous /-->
+
+<!-- wp:query-pagination-numbers /-->
+
+<!-- wp:query-pagination-next /-->
+<!-- /wp:query-pagination --></div>
+<!-- /wp:query --></div>
+<!-- /wp:group --></main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->
