@@ -46,6 +46,20 @@ Tags: block-theme, full-site-editing, one-column, two-columns, custom-colors, cu
 }
 
 
+/* --- Inline text colour --------------------------------------------------
+ * Core implements "colour just these words" with a <mark>, and suppresses the
+ * browser's default yellow highlight with an inline background-color of
+ * transparent. wp_kses_post() strips that rgba() declaration whenever content
+ * is saved by a user without unfiltered_html — which is what happens on any
+ * programmatic install — and the hero headline comes out highlighted in
+ * yellow. The class alone means "this mark carries a colour, not a highlight",
+ * so suppress it here rather than depending on the inline style surviving.
+ * ---------------------------------------------------------------------- */
+mark.has-inline-color {
+	background-color: transparent;
+}
+
+
 /* --- Block style: Handwritten (core/paragraph, core/heading) ------------- */
 .is-style-script {
 	font-family: var(--wp--preset--font-family--script);
