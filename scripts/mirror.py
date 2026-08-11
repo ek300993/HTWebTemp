@@ -109,6 +109,15 @@ def rewrite(text):
 
     # strip cache-busting query strings so the saved filenames resolve
     text = re.sub(r'(' + re.escape(BASE) + r'/[^"\'\s()]+?)\?[^"\'\s()>]*', r"\1", text)
+
+    # Drop the <head> links pointing at things a static copy doesn't have —
+    # RSS feeds, the REST API, xmlrpc. Invisible to a visitor, but they're dead
+    # ends and there's no reason to ship them.
+    text = re.sub(
+        r'<link[^>]*href="[^"]*(?:/feed/|wp-json|xmlrpc)[^"]*"[^>]*/?>\s*',
+        "", text, flags=re.I,
+    )
+    text = re.sub(r'<link[^>]*rel="EditURI"[^>]*/?>\s*', "", text, flags=re.I)
     return text
 
 
