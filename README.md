@@ -1,12 +1,38 @@
 # Happy Turtle — WordPress site
 
-## Live preview (share this with the client)
+## Two preview links
+
+### 1. Static preview — reliable, send this one
+
+**https://ek300993.github.io/HTWebTemp/**
+
+A plain-HTML crawl of the finished site on GitHub Pages. Loads instantly in any
+browser, nothing to boot, nothing that can fail. Every page, every image, all
+the navigation.
+
+What it can't do, because it's static files: the block editor, the search box,
+and the order form. It's for looking at, not for trying.
+
+Rebuild it after content or design changes with `scripts/mirror.py` (crawls
+`localhost:8080` into `docs/`), then commit and push — Pages redeploys itself.
+
+### 2. Playground preview — shows the editing experience
 
 **https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/ek300993/HTWebTemp/main/demo/blueprint.json**
 
 Runs the whole site — WordPress, PHP, database — inside the visitor's browser via
-WebAssembly. No hosting, no login, nothing to install. Takes ~30–60s to boot the
-first time while it downloads WordPress and the theme.
+WebAssembly, so the client can open the real block editor and try changing
+something. Takes ~30–60s to boot.
+
+**It doesn't always load.** Playground relies on a service worker and
+WebAssembly, and it fails for reasons that have nothing to do with this site:
+a stale service worker after one of their deploys, privacy extensions, corporate
+networks, older browsers. Observed failures include the app shell never fetching
+its own JS bundle, and hanging on "Preparing WordPress". A hard reload or a
+different browser usually clears it.
+
+Use the static link as the default and this one when you specifically want to
+show off how editable the site is.
 
 It's a *working* site, not a screenshot: the client can browse it, and can click
 **Edit Page** or **Edit Site** in the top bar to open the real block editor and
