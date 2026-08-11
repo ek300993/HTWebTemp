@@ -157,6 +157,156 @@ mark.has-inline-color {
 }
 
 
+/* --- Phone header --------------------------------------------------------
+ * Stacked centre works on a tablet, but on a phone two rows cost about 22% of
+ * the screen before any content appears. Once the hamburger is showing there
+ * are only three things to place, so put them on one row: menu, logo, order.
+ *
+ * The hamburger and the button live inside .ht-header-nav, so `display:
+ * contents` dissolves that wrapper and lets all three sit as siblings in the
+ * header row — otherwise the logo can't get between them.
+ *
+ * The logo takes the middle as a flex-1 slot and centres inside it, so it
+ * stays centred regardless of how wide the button ends up, and shrinks rather
+ * than overflowing on narrow phones.
+ * ---------------------------------------------------------------------- */
+@media (max-width: 600px) {
+	header > .wp-block-group {
+		padding-top: 0.85rem !important;
+		padding-bottom: 0.85rem !important;
+	}
+
+	.ht-header-inner {
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		gap: 0.5rem;
+	}
+
+	/*
+	 * Child selector, not a bare class: WordPress ships
+	 * `body .is-layout-flex { display: flex }` at (0,1,1), which outranks a
+	 * lone `.ht-header-nav` at (0,1,0). Without this the wrapper stays a flex
+	 * box, takes the full row, and squeezes the logo to zero width.
+	 */
+	.ht-header-inner > .ht-header-nav {
+		display: contents;
+	}
+
+	/*
+	 * Menu, logo, order — the logo takes the middle as a flexible slot and
+	 * centres inside it, so it stays put whatever width the button ends up,
+	 * and shrinks rather than overflowing on a narrow phone.
+	 */
+	.ht-header-inner > .wp-block-site-logo {
+		order: 2;
+		flex: 1 1 auto;
+		min-width: 0;
+		display: flex;
+		justify-content: center;
+	}
+
+	.ht-header-inner > .wp-block-site-logo img {
+		width: 150px;
+		max-width: 100%;
+		height: auto;
+	}
+
+	.ht-header-inner .wp-block-navigation {
+		order: 1;
+		flex: 0 0 auto;
+	}
+
+	.ht-header-inner .wp-block-buttons {
+		order: 3;
+		flex: 0 0 auto;
+	}
+
+	.ht-header-inner .wp-block-button__link {
+		font-size: 0.6875rem;
+		letter-spacing: 0.07em;
+		padding: 0.75rem 0.8rem;
+	}
+}
+
+
+/* --- The mobile menu overlay ---------------------------------------------
+ * Core's overlay ships unstyled — white ground, black system text, hard left
+ * alignment. On a phone this is the site's main navigation, so it shouldn't be
+ * the one screen that looks like stock WordPress. Cream ground, the display
+ * serif, centred like every other section.
+ * ---------------------------------------------------------------------- */
+/*
+ * Core sets the white ground with
+ * `.wp-block-navigation:not(.has-background) … .is-menu-open` — four classes,
+ * so a plain `.is-menu-open` never wins. Matching its selector shape and
+ * relying on load order beats it without resorting to !important.
+ */
+/*
+ * The overlay's colours come from the Navigation block's own
+ * overlayBackgroundColor / overlayTextColor attributes, set in parts/header.html
+ * — not from here. Core paints the default white ground with a five-class
+ * selector (`…:not(.disable-default-overlay-styles)`), which no reasonable
+ * theme selector outranks; the block attributes are the supported way in.
+ */
+.wp-block-navigation__responsive-container.is-menu-open {
+	padding: var(--wp--preset--spacing--lg) var(--wp--preset--spacing--md);
+}
+
+.wp-block-navigation__responsive-container.is-menu-open
+	.wp-block-navigation__responsive-container-content {
+	justify-content: center;
+	align-items: center;
+	padding-bottom: 12vh; /* optically centred rather than measured */
+}
+
+/*
+ * The <ul> shrinks to its widest item, so centring the list still leaves the
+ * shorter labels ragged inside it. Both the list and the text need centring.
+ * `.wp-block-navigation__container.wp-block-navigation` gets to (0,4,0),
+ * enough to carry over core's own alignment declaration.
+ */
+.wp-block-navigation__responsive-container.is-menu-open
+	.wp-block-navigation__container.wp-block-navigation {
+	gap: var(--wp--preset--spacing--md);
+	align-items: center;
+	text-align: center;
+}
+
+/*
+ * Each <li> is a *column* flex container, so justify-content centres it
+ * vertically, not across — which is why centring the list alone still left the
+ * shorter labels hanging off the left. Letting the link fill its row and
+ * centring the text inside it sidesteps the axis question entirely.
+ */
+.wp-block-navigation__responsive-container.is-menu-open
+	.wp-block-navigation-item {
+	align-items: center;
+	width: 100%;
+}
+
+.wp-block-navigation__responsive-container.is-menu-open
+	.wp-block-navigation-item__content {
+	display: block;
+	width: 100%;
+	text-align: center;
+	font-family: var(--wp--preset--font-family--display);
+	font-size: var(--wp--preset--font-size--xl);
+	font-weight: 500;
+	line-height: 1.2;
+	color: var(--wp--preset--color--ink);
+}
+
+.wp-block-navigation__responsive-container.is-menu-open
+	.current-menu-item > .wp-block-navigation-item__content {
+	color: var(--wp--preset--color--green);
+	box-shadow: none;
+}
+
+.wp-block-navigation__responsive-container-close {
+	color: var(--wp--preset--color--ink);
+}
+
+
 /* --- Page title banner ---------------------------------------------------
  * Interior pages drop the title band straight onto the first content section,
  * and the palette is deliberately low-contrast, so the seam can disappear:
