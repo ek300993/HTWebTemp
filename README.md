@@ -1,5 +1,43 @@
 # Happy Turtle — WordPress site
 
+## Live preview (share this with the client)
+
+**https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/ek300993/HTWebTemp/main/demo/blueprint.json**
+
+Runs the whole site — WordPress, PHP, database — inside the visitor's browser via
+WebAssembly. No hosting, no login, nothing to install. Takes ~30–60s to boot the
+first time while it downloads WordPress and the theme.
+
+It's a *working* site, not a screenshot: the client can browse it, and can click
+**Edit Page** or **Edit Site** in the top bar to open the real block editor and
+try changing text or adding a basket. That's the part worth showing — the design
+is only half the pitch, the other half is how safe it is to edit.
+
+Two things to tell them:
+
+- Every visitor gets their own fresh copy, and changes vanish on reload. Nothing
+  they do can break it, and nothing they type is saved.
+- The order form is a placeholder. It needs a form plugin, which is a hosting-time
+  decision (see "Deliberate omissions").
+
+### Regenerating the preview
+
+The blueprint installs from zips committed in `demo/`, so rebuild them after any
+theme or plugin change:
+
+```bash
+cd wp-content/themes  && zip -qr ../../demo/happy-turtle.zip happy-turtle -x "*.DS_Store"
+cd ../plugins         && zip -qr ../../demo/happy-turtle-gifts.zip happy-turtle-gifts -x "*.DS_Store"
+```
+
+Then commit and push. GitHub's raw CDN caches branch URLs for ~5 minutes, so give
+it a moment before re-testing or you'll be looking at the previous build.
+
+`demo/seed.php` creates the sample baskets and sideloads their photos out of the
+theme; `demo/blueprint.json` embeds a copy of it. Regenerate the blueprint if you
+change the seed — don't hand-edit the JSON, the PHP is escaped inside it.
+
+
 A custom block theme plus a small catalogue plugin for a gift-basket studio.
 Built on core WordPress blocks only: no page builder, no parent theme, no
 proprietary block library.
