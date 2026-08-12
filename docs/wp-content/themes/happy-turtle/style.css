@@ -222,13 +222,38 @@ mark.has-inline-color {
 		flex: 0 0 auto;
 	}
 
-	.ht-header-inner .ht-header-social {
-		order: 3;
-		flex: 0 0 auto;
+	/*
+	 * Instagram comes out of the bar on a phone — four items can't share that
+	 * width without the logo suffering. It moves into the menu instead, which
+	 * is where someone browsing on a phone goes looking anyway.
+	 *
+	 * The overlay is rendered by the Navigation block, so there's no way to put
+	 * markup inside it from a template. Instead the same icon is hidden in the
+	 * bar and pinned into the overlay when it opens — `:has()` on the wrapper
+	 * is what lets a sibling react to the menu's state.
+	 */
+	.ht-header-nav .ht-header-social {
+		display: none; /* scoped, or core's .wp-block-social-links wins the tie */
+	}
+
+	.ht-header-nav:has(.wp-block-navigation__responsive-container.is-menu-open)
+		.ht-header-social {
+		display: flex;
+		position: fixed;
+		bottom: 14vh;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 100001; /* the overlay itself sits at 100000 */
+	}
+
+	.ht-header-nav:has(.wp-block-navigation__responsive-container.is-menu-open)
+		.ht-header-social .wp-block-social-link-anchor {
+		width: 32px;
+		height: 32px;
 	}
 
 	.ht-header-inner .wp-block-buttons {
-		order: 4;
+		order: 3;
 		flex: 0 0 auto;
 	}
 
@@ -236,18 +261,6 @@ mark.has-inline-color {
 		font-size: 0.6875rem;
 		letter-spacing: 0.07em;
 		padding: 0.75rem 0.8rem;
-	}
-}
-
-
-/*
- * Below ~360px there isn't room for four things in the bar without the logo
- * becoming illegible, and the logo is the one that has to win. Instagram is
- * still in the footer and on the Contact page on those screens.
- */
-@media (max-width: 360px) {
-	.ht-header-social {
-		display: none;
 	}
 }
 
@@ -275,11 +288,26 @@ mark.has-inline-color {
 	padding: var(--wp--preset--spacing--lg) var(--wp--preset--spacing--md);
 }
 
+/*
+ * Core nests two block-level wrappers between the overlay and the links, and
+ * both shrink to their content — so `justify-content: center` was centring the
+ * links inside a 336px box and stranding them in the top third. Letting the
+ * whole chain stretch is what makes the centring mean anything.
+ */
+.wp-block-navigation__responsive-container.is-menu-open
+	> .wp-block-navigation__responsive-close,
+.wp-block-navigation__responsive-container.is-menu-open
+	.wp-block-navigation__responsive-dialog {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
 .wp-block-navigation__responsive-container.is-menu-open
 	.wp-block-navigation__responsive-container-content {
+	flex: 1;
 	justify-content: center;
 	align-items: center;
-	padding-bottom: 12vh; /* optically centred rather than measured */
 }
 
 /*
@@ -327,6 +355,16 @@ mark.has-inline-color {
 
 .wp-block-navigation__responsive-container-close {
 	color: var(--wp--preset--color--ink);
+}
+
+/* Focus moves into the menu when it opens, so the ring is seen often — it
+   should be the brand green rather than the browser's default. */
+.wp-block-navigation__responsive-container.is-menu-open
+	.wp-block-navigation-item__content:focus-visible,
+.wp-block-navigation__responsive-container-close:focus-visible {
+	outline: 2px solid var(--wp--preset--color--green);
+	outline-offset: 4px;
+	border-radius: 2px;
 }
 
 

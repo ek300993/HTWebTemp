@@ -82,7 +82,7 @@ kids.push(H1("Appears on every page"));
 kids.push(H2("Header"));
 kids.push(...item("Menu", "Home · About · How It Works · Reviews · Contact"));
 kids.push(...item("Button (top right)", "Start an Order"));
-kids.push(...item("Instagram icon", "Sits between the menu and the button. Opens your Instagram in a new tab."));
+kids.push(...item("Instagram icon", "In the bar on a computer; inside the menu on a phone. Opens your Instagram in a new tab."));
 
 kids.push(H2("Footer"));
 kids.push(...item("Tagline under the logo", "Beautifully curated gift baskets for life's special moments."));
