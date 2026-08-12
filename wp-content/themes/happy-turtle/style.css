@@ -176,7 +176,13 @@ mark.has-inline-color {
 		padding-bottom: 0.85rem !important;
 	}
 
-	.ht-header-inner {
+	/*
+	 * `.wp-block-group` is here to out-specify the container class WordPress
+	 * generates for blockGap, which otherwise holds the gap at 24px. With four
+	 * items in the row that's 72px of gap — enough to squeeze the logo down to
+	 * a few pixels on a small phone.
+	 */
+	.ht-header-inner.wp-block-group {
 		flex-wrap: nowrap;
 		justify-content: space-between;
 		gap: 0.5rem;
@@ -216,8 +222,13 @@ mark.has-inline-color {
 		flex: 0 0 auto;
 	}
 
-	.ht-header-inner .wp-block-buttons {
+	.ht-header-inner .ht-header-social {
 		order: 3;
+		flex: 0 0 auto;
+	}
+
+	.ht-header-inner .wp-block-buttons {
+		order: 4;
 		flex: 0 0 auto;
 	}
 
@@ -225,6 +236,18 @@ mark.has-inline-color {
 		font-size: 0.6875rem;
 		letter-spacing: 0.07em;
 		padding: 0.75rem 0.8rem;
+	}
+}
+
+
+/*
+ * Below ~360px there isn't room for four things in the bar without the logo
+ * becoming illegible, and the logo is the one that has to win. Instagram is
+ * still in the footer and on the Contact page on those screens.
+ */
+@media (max-width: 360px) {
+	.ht-header-social {
+		display: none;
 	}
 }
 
@@ -317,6 +340,59 @@ mark.has-inline-color {
  * ---------------------------------------------------------------------- */
 .ht-page-header {
 	border-bottom: 1px solid rgba(79, 99, 55, 0.18);
+}
+
+
+/* --- Instagram in the header --------------------------------------------
+ * The studio posts far more often than the site changes, so the feed is the
+ * liveliest thing it can point at — it belongs somewhere permanent rather than
+ * only in the footer.
+ *
+ * Core renders the icon at 24px, which is well under the ~44px that guidance
+ * asks of a touch target, so the padding here is doing accessibility work
+ * rather than decoration. The link already carries a screen-reader name from
+ * the block's `label` attribute.
+ * ---------------------------------------------------------------------- */
+.ht-header-social {
+	margin: 0;
+}
+
+.ht-header-social .wp-block-social-link {
+	margin: 0;
+}
+
+/*
+ * The touch target is the *hit area*, not the layout box. Reserving a full
+ * 44px of width here crushed the logo on a phone — at 320px it disappeared
+ * altogether. So the anchor stays icon-sized in the layout and an inset
+ * pseudo-element carries the target out to 44x44. The expansion matches the
+ * 8px header gap exactly, so neighbouring controls touch but never overlap.
+ */
+.ht-header-social .wp-block-social-link-anchor {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border-radius: 4px;
+	transition: opacity 150ms ease;
+}
+
+.ht-header-social .wp-block-social-link-anchor::after {
+	content: "";
+	position: absolute;
+	inset: -8px;
+}
+
+.ht-header-social .wp-block-social-link-anchor:hover {
+	opacity: 0.65;
+}
+
+.ht-header-social .wp-block-social-link-anchor:focus-visible {
+	outline: 2px solid var(--wp--preset--color--green);
+	outline-offset: 2px;
 }
 
 

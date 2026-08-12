@@ -110,6 +110,7 @@ everyone's happy, or we can crop the names out.
 |---|---|---|
 | Menu | Home · About · How It Works · Reviews · Contact | Draft |
 | Header button | Start an Order | Draft |
+| Instagram icon | Sits between the menu and the button; opens your Instagram in a new tab | — |
 | Footer tagline | Beautifully curated gift baskets for life's special moments. | Draft |
 | Footer links | Shop All Baskets · How It Works · Reviews · About | Draft |
 | Footer heading | Get in Touch | Draft |
