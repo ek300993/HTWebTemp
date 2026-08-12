@@ -71,8 +71,8 @@ kids.push(new Paragraph({
   children: [new TextRun({ text: "One thing to read first", bold: true, size: 22 })],
 }));
 kids.push(body("Some of what's on the site now is content I invented so the pages weren't empty. It reads as real, so it can't stay. Anything invented is marked in red italics below."));
-kids.push(body("The most important is the reviews — all three are made up. Publishing invented testimonials carries FTC penalties in the US, so those need replacing with real customer words before the site goes public, even if that means starting with just one."));
-kids.push(body("Also invented: all prices, all basket contents, the turnaround times, and the basket names."));
+kids.push(body("Invented, and still needing your words: all prices, all basket contents, the turnaround times, and the basket names."));
+kids.push(body("The reviews are real. Six have been taken from your Google listing and quoted word for word — nothing reworded."));
 
 kids.push(rule());
 
@@ -164,16 +164,25 @@ kids.push(...item("Page title", "Reviews"));
 kids.push(...item("Small label", "From Happy Customers"));
 kids.push(...item("Heading", "Kind Words"));
 
-kids.push(label("Review 1"));
-kids.push(body("“The basket was beautiful. My daughter's teacher actually cried when she opened it.”"));
-kids.push(body("— Sarah M."));
-kids.push(label("Review 2"));
-kids.push(body("“Ordered baskets for the whole bridal party. The contents list came back the same day.”"));
-kids.push(body("— Priya R."));
-kids.push(label("Review 3"));
-kids.push(body("“Everything inside was lovely and the wrapping meant I could gift it as-is.”"));
-kids.push(body("— Daniel K."));
-kids.push(flag("All three reviews are invented — these people don't exist and never said this. Replace with real customer words before launch. For each you'll need: the quote, a first name and last initial, and optionally what the basket was for."));
+kids.push(...item("Under the heading", "Rated 5.0 from 14 reviews on Google."));
+kids.push(note("A snapshot taken when these were added \u2014 update it as the count grows, or drop it. An out-of-date figure is worse than none."));
+
+kids.push(note("The six reviews below are real, taken from your Google listing and quoted verbatim. An ellipsis marks where a longer review was trimmed; nothing has been reworded."));
+
+const reviews = [
+  ["The custom made gift basket we received from Joyce for our new grandson was perfection! Down to the very last detail, of which there were many, was beyond expectation.", "Rebecca S. \u00b7 a basket for a new grandson"],
+  ["The attention to detail, quality of the items, and beautiful presentation blew us both away. It\u2019s so hard to find truly unique, high-quality custom gifts these days, but Happy Turtle nailed it.", "Jennie K. \u00b7 a new baby gift"],
+  ["The packages were huge and impressive, overflowing with high-quality items all beautifully packaged together\u2026 I have to think that anyone receiving a Happy Turtle package will feel lucky and appreciated!", "Eric K. \u00b7 received two baskets"],
+  ["I told Joyce a little about each client, my budget, and some preferences I had and she took care of the curating, the building, decorating, delivering and made each one perfect!", "Carmen M. \u00b7 client gifts for a realtor"],
+  ["We adored our gift basket and were blown away by all of the little details. We are so grateful for the custom gifts made special for our son and will cherish them forever!", "Katie M. \u00b7 custom gifts for her son"],
+  ["Joyce does a wonderful job creating these gifts, often tailoring baby baskets with a theme, and a beautiful job wrapping them up that gives the receiver that \u201cWOW\u201d feeling!", "Vivian S. \u00b7 repeat customer"],
+];
+reviews.forEach(([quote, who], i) => {
+  kids.push(label("Review " + (i + 1)));
+  kids.push(body("\u201c" + quote + "\u201d"));
+  kids.push(body("\u2014 " + who));
+});
+kids.push(note("Attribution is first name plus last initial. The full names are public on Google if you\u2019d rather show them. Four more good reviews are unused \u2014 Sarah T., Melanie K., Kathleen I. and Jennifer N. \u2014 if you want a different mix."));
 
 kids.push(rule());
 

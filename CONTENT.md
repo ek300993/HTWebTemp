@@ -19,21 +19,11 @@ Each line of copy is marked:
 These are the ones I made up so the site had something to show. They read as real,
 which is exactly why they can't stay.
 
-### The three reviews — invented
+### ~~The three reviews~~ — done
 
-"Sarah M.", "Priya R." and "Daniel K." are not real people and those quotes never
-happened. I wrote them.
-
-Beyond it being untrue, **publishing invented testimonials is illegal in the US** —
-the FTC's rule on fake reviews carries civil penalties. Please replace all three
-with genuine customer words before this is public, even if that means starting
-with only one real review, or removing the Reviews page until you have some.
-
-Screenshots of real messages or Instagram comments are a good source — just get a
-quick OK from whoever wrote them, and use a first name and last initial.
-
-**Need from you:** as many real reviews as you have. For each: the quote, first
-name + last initial, and optionally what the basket was for.
+Resolved. The invented testimonials have been replaced with six genuine reviews
+taken from the Google Business listing, quoted verbatim. Nothing left to do here
+unless you want different ones.
 
 ### Prices — invented
 
@@ -207,7 +197,26 @@ Take deposits? Deliver locally or post everything?
 |---|---|---|
 | Small label | From Happy Customers | Draft |
 | Heading | Kind Words | Draft |
-| Three quotes | *see section 1* | **PLACEHOLDER — invented** |
+| Under the heading | Rated 5.0 from 14 reviews on Google. | **Snapshot — update as the count grows, or remove it** |
+| Six quotes | Real, from Google — see below | **Yours** |
+
+The six reviews now on the page, quoted verbatim (an ellipsis marks where a
+longer review was trimmed; nothing has been reworded):
+
+| Quote | Attributed to |
+|---|---|
+| The custom made gift basket we received from Joyce for our new grandson was perfection! Down to the very last detail, of which there were many, was beyond expectation. | Rebecca S. · a basket for a new grandson |
+| The attention to detail, quality of the items, and beautiful presentation blew us both away. It's so hard to find truly unique, high-quality custom gifts these days, but Happy Turtle nailed it. | Jennie K. · a new baby gift |
+| The packages were huge and impressive, overflowing with high-quality items all beautifully packaged together… I have to think that anyone receiving a Happy Turtle package will feel lucky and appreciated! | Eric K. · received two baskets |
+| I told Joyce a little about each client, my budget, and some preferences I had and she took care of the curating, the building, decorating, delivering and made each one perfect! | Carmen M. · client gifts for a realtor |
+| We adored our gift basket and were blown away by all of the little details. We are so grateful for the custom gifts made special for our son and will cherish them forever! | Katie M. · custom gifts for her son |
+| Joyce does a wonderful job creating these gifts, often tailoring baby baskets with a theme, and a beautiful job wrapping them up that gives the receiver that "WOW" feeling! | Vivian S. · repeat customer |
+
+Attribution is first name plus last initial. The full names are public on Google
+if you'd rather show them — say the word and I'll switch it.
+
+There are 14 reviews in total; four more good ones are unused (Sarah T., Melanie
+K., Kathleen I., Jennifer N.) if you'd like a different mix.
 
 ### Shop / occasion pages
 
@@ -275,6 +284,6 @@ inspiration or personalisation) · Anything else
 
 If you only do three things:
 
-1. **Replace the three reviews**, or tell me to take the page down until you have real ones
-2. **Send photos for For Teachers, Weddings and Thank You** — three grey boxes on the homepage
-3. **Confirm your real prices and turnaround** — the site currently promises numbers I invented
+1. **Send photos for For Teachers, Weddings and Thank You** — three grey boxes on the homepage
+2. **Confirm your real prices and turnaround** — the site currently promises numbers I invented
+3. **Confirm the real basket contents** — those lists are guesses from the photos
