@@ -193,8 +193,11 @@ install looks right immediately rather than showing a grid of empty boxes.
 
 | File | Used for |
 |---|---|
-| `new-home-welcome.jpg` | Hero, New Home tile, Housewarming Basket |
-| `new-baby-elephant.jpg` | About section, New Baby tile |
+| `hero-banner.jpg` | Hero, 1100px and up (built — see below) |
+| `hero-scene.jpg` | Hero, below 1100px (the same scene, unblended) |
+| `brand-card.jpg` | About section |
+| `new-home-welcome.jpg` | New Home tile, Housewarming Basket |
+| `new-baby-elephant.jpg` | New Baby tile |
 | `new-baby-letterboard.jpg` | Welcome Baby Basket |
 | `graduation-crate.jpg` | Graduation tile, Graduation Crate |
 | `graduation-class-2026.jpg` | Class of 2026 Basket |
@@ -203,17 +206,105 @@ install looks right immediately rather than showing a grid of empty boxes.
 into the original; the top 15% is cropped off in the web version. Use
 `/Assets/web` rather than the raw files.
 
+`new-baby-myles.jpg` came in as a PNG (`new-baby-myles.png`) at 1086×1448 — under
+the 1600px ceiling, so the web version is the same size rather than an upscale,
+and it's encoded at q68 instead of q82 because the studio background is a large
+flat wash that JPEG spends a lot of bytes on at higher quality.
+
+### The hero banner
+
+`hero-banner.jpg` is built by `scripts/make-hero-banner.py` from
+`Assets/hero-banner.png` — a wide version of the Myles photograph with the scene
+painted out to the left, supplied rather than shot.
+
+The script's job is the left-hand end of that band. It takes the same image,
+stretches and blurs it past recognition into a wash, dissolves the sharp picture
+into that wash along an organic edge, and veils the result towards sand so the
+headline has a calm field to sit on. Because the wash is made from the picture,
+the two sides always agree on colour — the band stays sage at the top and warm at
+the bottom without anyone choosing a panel colour that's wrong somewhere. The
+dissolve edge is three sine waves of different frequencies summed and then
+blurred, so it wanders instead of ruling a line.
+
+```bash
+python3 scripts/make-hero-banner.py Assets/hero-banner.png \
+  wp-content/themes/happy-turtle/assets/images/hero-banner.jpg 2800 1270 0.50 0.24 extend
+```
+
+The numbers are width, height, where the sharp picture starts as a fraction of
+the width, how far the dissolve reaches back from it, and the mode. `extend` is
+for a source that's already a wide banner; `wide` takes an ordinary portrait
+photo and places it at the right, building the whole left-hand side from the
+wash.
+
+The veil strength inside the script (247/255) is set by contrast, not taste:
+ink-soft body text over the bare wood grain of the original measures 2.6:1, well
+under AA. Over the veiled band it measures 4.5:1. Lighten the veil and the
+supporting line under the headline stops being readable — check it if you change
+that number.
+
+Above 1100px the band's height is `clamp(500px, 45vw, 860px)` rather than a fixed
+number, so the box stays at roughly the banner's own 2.2:1 and the basket never
+gets letterboxed off the bottom on a wide monitor.
+
+**Below 1100px the hero uses a different file.** There's no room for words beside
+the basket at those widths, so the copy goes over the picture — and the blended
+banner is the wrong image for that, because a phone-width crop of it is mostly
+wash. `hero-scene.jpg` is the same wide scene with no blend applied (plain
+`sips`-style resize of `Assets/hero-banner.png` to 2800px, q82), shown as a CSS
+`background-image` on the cover — CSS can't swap an `<img>` src, so the block's
+own image is hidden there. The cover's dim layer, unused at these widths, becomes
+the scrim that keeps the text readable.
+
+That scrim is an even 78% sand veil — flat, not a gradient — and it's sized
+against the **worst patch** behind the words rather than the average, which is
+the part that actually decides whether a page reads. The elephant's ears and the
+milestone plaque sit directly under the headline and are much darker than the
+wall around them: at a 58% veil the average looks comfortable but the green over
+those ears falls to **2.8:1**, under the 3:1 large-text minimum. At 78%, with
+the supporting line switched from ink-soft to full ink, body text holds
+**8.6:1** against its darkest patch and the headline green **4:1**. Over the
+bare photograph, for reference, ink-soft measures 1.5:1.
+
+Below 782px the crop also shifts to `89%` so the basket is centred under the
+copy; between 782 and 1100px it stays at `82%`, which keeps the basket to the
+right of the words the way the desktop band does.
+
+Changing the hero photograph means getting the scene extended sideways first —
+the script blends an existing wide picture rather than inventing one — then
+re-running the command above for `hero-banner.jpg` and dropping a plain 2800px
+resize of the same source in as `hero-scene.jpg`. That's the one place on the
+site where changing a picture isn't just a click.
+
+`new-baby-myles.jpg` (in `/Assets/web`, not shipped in the theme) is the original
+portrait shot the banner was painted out from. Nothing on the site uses it now;
+it's kept because it's the source of record for the hero.
+
 For Teachers, Weddings and Thank You have no photograph yet and fall back to
 `placeholder.svg` — a warm neutral deliberately distinct from cream/sand/sage so
 the slot stays visible on every section background. Every tile image is pinned
 to a 4:3 `aspect-ratio` with `object-fit: cover`, so real photos and placeholders
-sit in an even row regardless of what gets uploaded.
+sit in an even row regardless of what gets uploaded. The hero's stacked phone
+photo is the exception at 4:5, because that picture is portrait and a landscape
+crop cut the top off the basket.
+
+The About section's image is on no ratio at all — it runs at the column's full
+width and its own natural height, uncropped. `brand-card.jpg` is a logo shot, so
+any crop takes an end off the wordmark; showing all of it matters more there than
+filling the band edge to edge. The band is still deliberately shallow — `lg`
+padding on the text column rather than `xxl` — so the picture comes close to
+filling it anyway, with a little sage above and below.
 
 **Worth confirming before launch:** these photos show real customers' names
-(Abigail, Chloe, Clem + Connie, the Ort family, Syndey, Oshlee). They appear to
-be the studio's own social posts, but a website is more permanent and more
-indexable than an Instagram post — worth a quick check that everyone's happy to
-appear there.
+(Abigail, Chloe, Clem + Connie, the Ort family, Syndey, Oshlee, Myles). They
+appear to be the studio's own social posts, but a website is more permanent and
+more indexable than an Instagram post — worth a quick check that everyone's happy
+to appear there.
+
+The hero photo needs that check most. The milestone plaque in it is legible at
+full size: an infant's full name, date of birth, weight, length and time of
+birth, on the largest image on the front page. Everything else on the site shows
+a first name at most.
 
 ## Gotchas worth knowing
 

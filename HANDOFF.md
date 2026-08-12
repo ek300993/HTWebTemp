@@ -106,6 +106,16 @@ time. If you genuinely need a new colour, that's a small change for a developer.
 **Preview before you publish.** Top right → Preview → in a new tab. Worth doing
 on your phone, since the layouts rearrange on small screens.
 
+**The big picture at the top of the home page is a special one.** It's a wide
+version of the photo with the left-hand side fading into a soft background, so
+the words have somewhere clean to sit. That fade is baked into the picture
+itself, which means uploading an ordinary photo in its place won't look right —
+the words would land on top of the basket. If you ever want a different picture
+up there, that's a small job for a developer rather than a swap in the editor —
+there's a second, plain copy of it behind the scenes for phones and tablets,
+where the words sit straight on the photo. Everything else on the site is still a
+click-and-upload.
+
 **Your Instagram is linked** in the footer and on the Contact page. To change the
 address: Appearance → Editor → click the footer → click the Instagram icon.
 

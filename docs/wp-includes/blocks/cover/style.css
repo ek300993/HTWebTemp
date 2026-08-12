@@ -1,0 +1,14 @@
+/*
+ * Core's cover-block stylesheet. The static mirror was crawled before the home
+ * page used a cover block, so this file was never fetched; it is the subset the
+ * hero needs, and a fresh run of scripts/mirror.py will replace it with the
+ * real one from WordPress.
+ */
+.wp-block-cover{position:relative;display:flex;align-items:center;justify-content:center;box-sizing:border-box;min-height:430px;padding:1em;overflow:hidden;background-position:50%;background-size:cover}
+.wp-block-cover .wp-block-cover__background{position:absolute;top:0;left:0;right:0;bottom:0;z-index:1}
+.wp-block-cover .wp-block-cover__background.has-background-dim-0{opacity:0}
+.wp-block-cover img.wp-block-cover__image-background{position:absolute;top:0;left:0;width:100%;height:100%;max-width:none;margin:0;padding:0;border:none;object-fit:cover;outline:none;z-index:0}
+.wp-block-cover .wp-block-cover__inner-container{position:relative;width:100%;z-index:2;color:inherit}
+.wp-block-cover.has-custom-content-position .wp-block-cover__inner-container{margin:0}
+.wp-block-cover.is-position-center-left{align-items:center;justify-content:flex-start}
+.wp-block-cover.is-position-center-center{align-items:center;justify-content:center}

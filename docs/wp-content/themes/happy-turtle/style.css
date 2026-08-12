@@ -123,6 +123,134 @@ mark.has-inline-color {
 }
 
 
+/* --- Hero band -----------------------------------------------------------
+ * The banner is pre-blended: photograph on the right, dissolving leftwards
+ * into a wash of its own colours. All this has to do is keep the words inside
+ * the calm half and stop the picture growing taller than the band.
+ * ---------------------------------------------------------------------- */
+@media (min-width: 1100px) {
+	/*
+	 * The band's height tracks its width so the box stays at roughly the
+	 * banner's own 2.2:1 — a fixed height would letterbox the picture on a
+	 * wide monitor and cut the bottom off the basket. !important because the
+	 * cover block writes min-height as an inline style.
+	 */
+	.ht-hero {
+		min-height: clamp(500px, 45vw, 860px) !important;
+	}
+
+	/*
+	 * `.wp-block-cover` is in the selector to out-weigh core's
+	 * `.has-custom-content-position .wp-block-cover__inner-container
+	 * { margin: 0 }`, which otherwise pins the container to the left edge of
+	 * the screen instead of the wide column.
+	 */
+	.wp-block-cover.ht-hero > .wp-block-cover__inner-container {
+		box-sizing: border-box;
+		max-width: calc(var(--wp--style--global--wide-size) + 2 * var(--wp--preset--spacing--md));
+		margin-inline: auto;
+		padding-inline: var(--wp--preset--spacing--md);
+	}
+
+	.ht-hero .ht-hero-copy {
+		max-width: 44%;
+		margin-inline: 0 auto;
+	}
+}
+
+
+/* --- Hero band, narrow ---------------------------------------------------
+ * Under 1100px there's no room for words beside the basket, so the copy goes
+ * over the picture instead. The blended banner is the wrong image for that —
+ * its whole left half is wash, which on a phone crop is just an empty field —
+ * so the narrow band uses `hero-scene.jpg`, the same scene without the blend,
+ * and leans on a scrim for legibility rather than on the blur.
+ *
+ * The image arrives as a CSS background rather than the cover block's own
+ * <img>, because swapping a src isn't something CSS can do. The cover's dim
+ * layer, unused at these widths, becomes the scrim.
+ *
+ * Numbers here are set by measurement, not taste, and the number that matters
+ * is the worst patch behind the words rather than the average: the elephant's
+ * ears and the milestone plaque sit right under the headline, and they are far
+ * darker than the wall around them. Over the bare photograph ink-soft body text
+ * averages 1.5:1. At a flat 78% sand veil, with that text switched to
+ * full-strength ink, the body copy holds 8.6:1 against its darkest patch and
+ * the green in the headline — display-size, so judged against the 3:1
+ * large-text threshold — holds 4:1. A lighter veil looks fine on average and
+ * still loses the headline over the ears: at 58% that worst case is 2.8:1.
+ * ---------------------------------------------------------------------- */
+@media (max-width: 1099px) {
+	.ht-hero {
+		min-height: clamp(540px, 96vw, 760px) !important;
+		align-items: flex-start;
+		padding-block: var(--wp--preset--spacing--xl) !important;
+		background-image: url(assets/images/hero-scene.jpg);
+		background-size: cover;
+		background-position: 82% 50%;
+	}
+
+	.wp-block-cover.ht-hero > img.wp-block-cover__image-background {
+		display: none !important;
+	}
+
+	.wp-block-cover.ht-hero > .wp-block-cover__background {
+		opacity: 1 !important;
+		background: rgba(242, 236, 225, 0.78) !important;
+	}
+
+	/* The cover zeroes its own padding, so the copy needs the root gutter. */
+	.wp-block-cover.ht-hero > .wp-block-cover__inner-container {
+		box-sizing: border-box;
+		padding-inline: var(--wp--preset--spacing--md);
+	}
+
+	/*
+	 * ink-soft is right on a flat background and too faint on a photograph.
+	 * !important because WordPress emits the preset colour classes with it.
+	 */
+	.ht-hero .ht-hero-copy .has-ink-soft-color {
+		color: var(--wp--preset--color--ink) !important;
+	}
+
+	/*
+	 * On a phone the copy runs the full width, so the basket sits centred
+	 * under it rather than off to one side.
+	 *
+	 * The band is 540px tall at every phone size, which scales the picture to
+	 * about 1190px wide and leaves a window roughly 31% of the frame. The
+	 * basket is a shade wider than that window, so it can't be framed whole —
+	 * 89% is the position that trims it evenly on both sides, which is what
+	 * reads as centred. Arrived at by eye against the rendered page; the
+	 * arithmetic gets you close but the basket's edges are soft.
+	 */
+	@media (max-width: 781px) {
+		.ht-hero {
+			background-position: 89% 50%;
+		}
+	}
+}
+
+
+/* --- About split, stacked ------------------------------------------------
+ * Side by side the card is vertically centred, so the band's own height gives
+ * it room. Once core stacks the columns at 782px that room disappears and the
+ * card butts straight against the top of the sage band, which reads as a
+ * mistake.
+ *
+ * Padding rather than margin, for two reasons: WordPress zeroes the first
+ * child's margin with `:root :where(.is-layout-flow) > :first-child`, which at
+ * (0,2,0) outweighs a plain class selector; and a top margin on the first
+ * child would collapse out through the band and push the whole section down
+ * instead of opening space inside it, leaving the gap in the wrong colour.
+ * ---------------------------------------------------------------------- */
+@media (max-width: 781px) {
+	.ht-about-card {
+		padding-top: var(--wp--preset--spacing--lg);
+	}
+}
+
+
 /* --- Stacked header ------------------------------------------------------
  * Once the logo can no longer sit beside the menu it drops onto its own row,
  * and a left-aligned logo above a left-aligned menu reads as broken. Below the
