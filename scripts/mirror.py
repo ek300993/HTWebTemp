@@ -20,7 +20,10 @@ from urllib.error import HTTPError, URLError
 
 SRC = "http://localhost:8080"
 BASE = "/HTWebTemp"                      # GitHub Pages project path
-OUT = Path("/Users/evankim/Projects/Happy Turtle/docs")
+
+# Relative to the repository, not to whoever is running it — this has to work
+# from a git worktree as well as from the main checkout. MIRROR_OUT overrides.
+OUT = Path(os.environ.get("MIRROR_OUT") or Path(__file__).resolve().parent.parent / "docs")
 
 SKIP = re.compile(r"/wp-admin|/wp-login|/wp-json|[?&]s=|/feed/?$|xmlrpc")
 ASSET_EXT = re.compile(r"\.(css|js|jpe?g|png|gif|svg|webp|woff2?|ttf|eot|ico|mp4)$", re.I)
@@ -122,7 +125,10 @@ def rewrite(text):
 
 
 def main():
-    seeds = [f"{SRC}/"]
+    # The basket archive is no longer linked from the homepage — Browse Baskets
+    # took over that job — so the crawl has to be told about it, or it drops out
+    # of the mirror while still being a live page.
+    seeds = [f"{SRC}/", f"{SRC}/shop/"]
     seen = set()
     q = deque(seeds)
 
@@ -151,10 +157,28 @@ def main():
         for a in al:
             assets.setdefault(a.split("?")[0], None)
 
-    for url in list(assets):
-        s, b, c = fetch(url)
-        if b:
+    # Fetch the assets, following stylesheets into whatever they reference.
+    #
+    # A stylesheet can be the only place an image is named — the hero's narrow
+    # layout swaps the picture with a CSS `background-image`, because CSS can't
+    # change an <img> src. Discovering assets from HTML alone silently drops
+    # those, and the miss doesn't show up until someone opens the static preview
+    # on a phone and finds the hero empty. Keep going until a pass finds nothing
+    # new; in practice that's two.
+    pending = list(assets)
+    while pending:
+        found = set()
+        for url in pending:
+            s, b, c = fetch(url)
+            if not b:
+                continue
             assets[url] = b
+            if urlparse(url).path.lower().endswith(".css"):
+                _, nested = discover(b.decode("utf-8", "replace"), url)
+                found |= {n.split("?")[0] for n in nested}
+        pending = [u for u in found if u not in assets]
+        for u in pending:
+            assets.setdefault(u, None)
 
     # write everything out
     OUT.mkdir(parents=True, exist_ok=True)
