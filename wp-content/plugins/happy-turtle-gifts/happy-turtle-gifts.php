@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       Happy Turtle Gift Baskets
- * Description:       Adds the gift basket catalogue — a Baskets post type and Occasions taxonomy. Lives in a plugin rather than the theme on purpose: if the site is ever re-themed, the baskets stay put.
- * Version:           1.1.0
+ * Description:       Adds the gift basket catalogue — a Baskets post type and Occasions taxonomy — and the enquiry form on the Contact page. Lives in a plugin rather than the theme on purpose: if the site is ever re-themed, the baskets stay put.
+ * Version:           1.2.0
  * Requires at least: 6.6
  * Requires PHP:      7.4
  * Author:            Happy Turtle Custom Gifts
@@ -17,7 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HAPPY_TURTLE_GIFTS_VERSION', '1.1.0' );
+define( 'HAPPY_TURTLE_GIFTS_VERSION', '1.2.0' );
+
+require_once plugin_dir_path( __FILE__ ) . 'inc/contact-form.php';
 
 
 /**
@@ -157,20 +159,23 @@ add_action( 'init', 'happy_turtle_register_basket_taxonomy' );
 
 
 /**
- * The occasions from the homepage design.
+ * The eight kinds of basket the studio makes.
  *
- * The slugs here must match the links in the occasion-grid pattern.
+ * The slugs here must match the anchors in the page-browse-baskets pattern, and
+ * the order is the order the rows appear on that page.
  *
  * @return array<string,string> slug => name
  */
 function happy_turtle_default_occasions() {
 	return array(
-		'for-teachers'   => __( 'For Teachers', 'happy-turtle-gifts' ),
-		'weddings'       => __( 'Weddings', 'happy-turtle-gifts' ),
-		'new-home'       => __( 'New Home', 'happy-turtle-gifts' ),
-		'new-baby'       => __( 'New Baby', 'happy-turtle-gifts' ),
-		'graduation'     => __( 'Graduation', 'happy-turtle-gifts' ),
-		'thank-you'      => __( 'Thank You', 'happy-turtle-gifts' ),
+		'new-baby'        => __( 'New Baby', 'happy-turtle-gifts' ),
+		'new-home'        => __( 'New Home', 'happy-turtle-gifts' ),
+		'graduation'      => __( 'Graduation', 'happy-turtle-gifts' ),
+		'weddings'        => __( 'Weddings', 'happy-turtle-gifts' ),
+		'retirement'      => __( 'Retirement', 'happy-turtle-gifts' ),
+		'birthday'        => __( 'Birthday', 'happy-turtle-gifts' ),
+		'for-teachers'    => __( 'For Teachers', 'happy-turtle-gifts' ),
+		'thinking-of-you' => __( 'Thinking of You', 'happy-turtle-gifts' ),
 	);
 }
 
@@ -185,6 +190,23 @@ function happy_turtle_gifts_activate() {
 
 	happy_turtle_register_basket_post_type();
 	happy_turtle_register_basket_taxonomy();
+
+	/*
+	 * "Thank You" became "Thinking of You" when the eight kinds of basket were
+	 * settled. Rename rather than add, so any basket already filed under it
+	 * keeps its occasion instead of quietly ending up in a term nothing links to.
+	 */
+	$thank_you = term_exists( 'thank-you', 'basket_occasion' );
+	if ( $thank_you && ! term_exists( 'thinking-of-you', 'basket_occasion' ) ) {
+		wp_update_term(
+			(int) $thank_you['term_id'],
+			'basket_occasion',
+			array(
+				'name' => __( 'Thinking of You', 'happy-turtle-gifts' ),
+				'slug' => 'thinking-of-you',
+			)
+		);
+	}
 
 	foreach ( happy_turtle_default_occasions() as $slug => $name ) {
 		if ( ! term_exists( $slug, 'basket_occasion' ) ) {

@@ -107,6 +107,27 @@ mark.has-inline-color {
 }
 
 
+/* --- Occasion tiles on a phone -------------------------------------------
+ * The row is tuned to land seven tiles across at full width, which means the
+ * column minimum is small enough that a phone fits exactly one — seven
+ * full-width tiles, about two and a half screens of scrolling before the page
+ * gets going. Two across is the same information in a quarter of the height.
+ *
+ * An explicit column count rather than a smaller minimum: the minimum is what
+ * pins the desktop row at seven, and a number small enough to give two columns
+ * on a 360px phone is also small enough to let an eighth column appear at
+ * 1240px, with an empty track on the end.
+ *
+ * Only phones: from 600px up the grid finds three tracks on its own, and four
+ * by tablet width, which is the right shape for those screens.
+ * ---------------------------------------------------------------------- */
+@media (max-width: 599px) {
+	.ht-occasions.is-layout-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+
 /* --- Category + gift tiles ---------------------------------------------- */
 .ht-tile img {
 	transition: transform 400ms ease, opacity 400ms ease;
@@ -120,6 +141,34 @@ mark.has-inline-color {
 .ht-tile figure {
 	overflow: hidden;
 	border-radius: 4px;
+}
+
+
+/* --- Hero band: the content box ------------------------------------------
+ * WordPress 7.0.4 rewrote the rule that positions a cover block's inner
+ * container. It used to be `.has-custom-content-position … { margin: 0 }` at two
+ * classes; it is now five classes (core doubles `.has-custom-content-position`
+ * to buy specificity) and it also sets `width: auto`.
+ *
+ * Both halves break this hero. `width: auto` on a flex item means shrink-to-fit,
+ * and since the copy inside is sized as a percentage of the container the two
+ * resolve against each other and settle at about 40% of the band — the headline
+ * comes out four words tall in a narrow gutter. And the raised specificity
+ * beats the theme's old three-class selector, so `margin-inline: auto` stopped
+ * centring the box on wide monitors and the copy drifted away from the column
+ * every other section lines up with.
+ *
+ * Matching core's weight fixes both. Doubling the class is core's own trick,
+ * kept here so the two selectors are visibly the same shape.
+ *
+ * The cover zeroes its own padding, so the gutter belongs here too, at every
+ * width — both hero queries below depend on this box.
+ * ---------------------------------------------------------------------- */
+.wp-block-cover.has-custom-content-position.has-custom-content-position.ht-hero
+	> .wp-block-cover__inner-container {
+	box-sizing: border-box;
+	width: 100%;
+	padding-inline: var(--wp--preset--spacing--md);
 }
 
 
@@ -140,21 +189,27 @@ mark.has-inline-color {
 	}
 
 	/*
-	 * `.wp-block-cover` is in the selector to out-weigh core's
-	 * `.has-custom-content-position .wp-block-cover__inner-container
-	 * { margin: 0 }`, which otherwise pins the container to the left edge of
-	 * the screen instead of the wide column.
+	 * Cap the box at the wide column and centre it, so the hero's words start
+	 * where every other section's do. Same doubled class as above: core pins
+	 * the container to `margin: 0` at five classes, and anything lighter loses.
 	 */
-	.wp-block-cover.ht-hero > .wp-block-cover__inner-container {
-		box-sizing: border-box;
+	.wp-block-cover.has-custom-content-position.has-custom-content-position.ht-hero
+		> .wp-block-cover__inner-container {
 		max-width: calc(var(--wp--style--global--wide-size) + 2 * var(--wp--preset--spacing--md));
 		margin-inline: auto;
-		padding-inline: var(--wp--preset--spacing--md);
 	}
 
+	/*
+	 * Inset from the wide column rather than flush with it. Every other section
+	 * starts its text at the column edge, but they all sit on a flat band —
+	 * the hero's words sit on a picture, and starting them at the same 24px
+	 * gutter leaves the headline hard against the left of the screen on a
+	 * laptop. The extra step in gives the display-size type somewhere to
+	 * breathe without moving it far enough to read as a different column.
+	 */
 	.ht-hero .ht-hero-copy {
 		max-width: 44%;
-		margin-inline: 0 auto;
+		margin-inline: var(--wp--preset--spacing--xl) auto;
 	}
 }
 
@@ -197,12 +252,6 @@ mark.has-inline-color {
 	.wp-block-cover.ht-hero > .wp-block-cover__background {
 		opacity: 1 !important;
 		background: rgba(242, 236, 225, 0.78) !important;
-	}
-
-	/* The cover zeroes its own padding, so the copy needs the root gutter. */
-	.wp-block-cover.ht-hero > .wp-block-cover__inner-container {
-		box-sizing: border-box;
-		padding-inline: var(--wp--preset--spacing--md);
 	}
 
 	/*
@@ -251,59 +300,45 @@ mark.has-inline-color {
 }
 
 
-/* --- Stacked header ------------------------------------------------------
- * Once the logo can no longer sit beside the menu it drops onto its own row,
- * and a left-aligned logo above a left-aligned menu reads as broken. Below the
- * breakpoint the header stacks deliberately and centres both rows.
+/* --- When the menu stops fitting ------------------------------------------
+ * Seven menu items, an Instagram icon and a call-to-action button need about
+ * 1010px next to a 190px logo. Below that the row has to give, and the two ways
+ * it can give are both worse than a hamburger: wrapping leaves a ragged second
+ * line, stacking costs a fifth of a tablet screen before any content appears.
  *
- * 900px is where the row genuinely runs out of space: logo (190px) + gap (24px)
- * + menu and CTA (~636px) + root padding (48px). Setting flex-basis to 100%
- * here means the breakpoint *causes* the stack rather than racing it, so there
- * is no width at which the header is wrapped but still left-aligned.
+ * So the overlay menu — which core turns on at 600px — is extended up to
+ * 1120px. Core does that with a single media query, and undoing it is a matter
+ * of restoring the two declarations it overrides. Nothing here touches the
+ * overlay's own open state, which is driven by a class rather than a width.
  *
- * The hamburger appears at core's own 600px breakpoint, comfortably inside this
- * range, so the logo is centred whenever the hamburger is showing too.
- *
- * If menu items are added, raise this number to match the wider menu.
+ * If menu items are added or removed, remeasure and move this number. It
+ * appears three times below and in the header layout query that follows.
  * ---------------------------------------------------------------------- */
-@media (max-width: 900px) {
-	.ht-header-inner {
-		justify-content: center;
-		text-align: center;
-	}
-
-	.ht-header-inner > .wp-block-site-logo {
-		flex: 0 0 100%;
+@media (min-width: 600px) and (max-width: 1119.98px) {
+	.ht-header-nav .wp-block-navigation__responsive-container-open:not(.always-shown) {
 		display: flex;
-		justify-content: center;
 	}
 
-	.ht-header-nav {
-		flex: 0 0 100%;
-		justify-content: center;
+	.ht-header-nav
+		.wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) {
+		display: none;
 	}
 }
 
 
-/* --- Phone header --------------------------------------------------------
- * Stacked centre works on a tablet, but on a phone two rows cost about 22% of
- * the screen before any content appears. Once the hamburger is showing there
- * are only three things to place, so put them on one row: menu, logo, order.
+/* --- Compact header ------------------------------------------------------
+ * Whenever the hamburger is showing there are only a few things left to place,
+ * so they go on one row: menu, logo, Instagram, order.
  *
  * The hamburger and the button live inside .ht-header-nav, so `display:
- * contents` dissolves that wrapper and lets all three sit as siblings in the
+ * contents` dissolves that wrapper and lets all of them sit as siblings in the
  * header row — otherwise the logo can't get between them.
  *
  * The logo takes the middle as a flex-1 slot and centres inside it, so it
  * stays centred regardless of how wide the button ends up, and shrinks rather
  * than overflowing on narrow phones.
  * ---------------------------------------------------------------------- */
-@media (max-width: 600px) {
-	header > .wp-block-group {
-		padding-top: 0.85rem !important;
-		padding-bottom: 0.85rem !important;
-	}
-
+@media (max-width: 1119.98px) {
 	/*
 	 * `.wp-block-group` is here to out-specify the container class WordPress
 	 * generates for blockGap, which otherwise holds the gap at 24px. With four
@@ -313,7 +348,7 @@ mark.has-inline-color {
 	.ht-header-inner.wp-block-group {
 		flex-wrap: nowrap;
 		justify-content: space-between;
-		gap: 0.5rem;
+		gap: var(--wp--preset--spacing--sm);
 	}
 
 	/*
@@ -327,10 +362,15 @@ mark.has-inline-color {
 	}
 
 	/*
-	 * Menu, logo, order — the logo takes the middle as a flexible slot and
-	 * centres inside it, so it stays put whatever width the button ends up,
-	 * and shrinks rather than overflowing on a narrow phone.
+	 * Menu, logo, Instagram, order — the logo takes the middle as a flexible
+	 * slot and centres inside it, so it stays put whatever width the button
+	 * ends up, and shrinks rather than overflowing on a narrow phone.
 	 */
+	.ht-header-inner .wp-block-navigation {
+		order: 1;
+		flex: 0 0 auto;
+	}
+
 	.ht-header-inner > .wp-block-site-logo {
 		order: 2;
 		flex: 1 1 auto;
@@ -339,15 +379,35 @@ mark.has-inline-color {
 		justify-content: center;
 	}
 
+	.ht-header-nav .ht-header-social {
+		order: 3;
+	}
+
+	.ht-header-inner .wp-block-buttons {
+		order: 4;
+		flex: 0 0 auto;
+	}
+}
+
+
+/* --- Phone header --------------------------------------------------------
+ * Same row, tighter: the logo and the button both come down a size, and
+ * Instagram comes out of the bar altogether.
+ * ---------------------------------------------------------------------- */
+@media (max-width: 600px) {
+	header > .wp-block-group {
+		padding-top: 0.85rem !important;
+		padding-bottom: 0.85rem !important;
+	}
+
+	.ht-header-inner.wp-block-group {
+		gap: 0.5rem;
+	}
+
 	.ht-header-inner > .wp-block-site-logo img {
 		width: 150px;
 		max-width: 100%;
 		height: auto;
-	}
-
-	.ht-header-inner .wp-block-navigation {
-		order: 1;
-		flex: 0 0 auto;
 	}
 
 	/*
@@ -378,11 +438,6 @@ mark.has-inline-color {
 		.ht-header-social .wp-block-social-link-anchor {
 		width: 32px;
 		height: 32px;
-	}
-
-	.ht-header-inner .wp-block-buttons {
-		order: 3;
-		flex: 0 0 auto;
 	}
 
 	.ht-header-inner .wp-block-button__link {
@@ -565,6 +620,338 @@ mark.has-inline-color {
 /* --- Navigation: underline the page you're on --------------------------- */
 .wp-block-navigation .wp-block-navigation-item.current-menu-item > a {
 	box-shadow: inset 0 -1px 0 0 currentColor;
+}
+
+
+/* --- Anchored headings ---------------------------------------------------
+ * The occasion tiles and the Browse Baskets jump links both land on a heading,
+ * and the enquiry form returns to its own anchor after sending. Without a
+ * scroll margin the target lands hard against the top of the window with no air
+ * above it — and on Browse Baskets it would sit above the top edge of its own
+ * coloured band, which reads as landing in the wrong section.
+ * ---------------------------------------------------------------------- */
+.wp-block-heading[id],
+.wp-block-group[id] {
+	scroll-margin-top: var(--wp--preset--spacing--xl);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	html {
+		scroll-behavior: smooth;
+	}
+}
+
+
+/* --- Jump links ----------------------------------------------------------
+ * Browse Baskets runs to eight bands, five or six screens of scrolling. A row
+ * of pills at the top turns that into one click, and doubles as a contents
+ * page: someone who came for a retirement basket can see straight away that
+ * there is one.
+ *
+ * Outlined rather than filled, because they sit directly under the intro
+ * paragraph and a row of eight solid green pills would out-shout the heading.
+ * ---------------------------------------------------------------------- */
+.ht-chips p {
+	margin: 0;
+}
+
+.ht-chips a {
+	display: inline-block;
+	padding: 0.45rem 0.95rem;
+	border: 1px solid rgba(79, 99, 55, 0.28);
+	border-radius: 999px;
+	color: var(--wp--preset--color--ink);
+	letter-spacing: 0.05em;
+	white-space: nowrap;
+	transition: background-color 150ms ease, border-color 150ms ease,
+		color 150ms ease;
+}
+
+.ht-chips a:hover,
+.ht-chips a:focus-visible {
+	background-color: var(--wp--preset--color--green);
+	border-color: var(--wp--preset--color--green);
+	color: var(--wp--preset--color--cream);
+	text-decoration: none; /* the global link hover underlines; a filled pill doesn't want it */
+}
+
+.ht-chips a:focus-visible {
+	outline: 2px solid var(--wp--preset--color--green);
+	outline-offset: 2px;
+}
+
+
+/* --- "Often includes" ----------------------------------------------------
+ * A list, marked up as one, set two-up rather than as a single stacked column.
+ * Four items down the page under every one of eight headings reads as a form to
+ * fill in; the same four in a small block read as a sample of what's inside,
+ * which is what they are — and two-up keeps the block roughly as tall as the
+ * photograph beside it instead of stretching the band.
+ *
+ * A grid, not a flowing run with separators: the items are phrases rather than
+ * single words, so a run wraps unpredictably and a wrapped line can open with a
+ * stranded separator. Fixed tracks wrap where they're told.
+ * ---------------------------------------------------------------------- */
+.ht-includes {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0.5rem var(--wp--preset--spacing--md);
+	margin: 0;
+	color: var(--wp--preset--color--ink-soft);
+}
+
+.ht-includes li {
+	position: relative;
+	margin: 0;
+	padding-left: 1rem;
+	line-height: 1.5;
+}
+
+.ht-includes li::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0.6em;
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background-color: var(--wp--preset--color--green-light);
+}
+
+/*
+ * Once the bands have stacked: one track, because two in a phone-width column
+ * leaves three words per line — and the photograph goes first every time.
+ *
+ * The bands alternate photograph left and right, which on a phone becomes
+ * alternately photograph-first and words-first as the columns stack in document
+ * order. Side by side the alternation is the rhythm of the page; stacked it just
+ * reads as inconsistent, so the picture is pulled to the top of every band.
+ */
+@media (max-width: 781px) {
+	.ht-includes {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.ht-browse > .ht-browse-media {
+		order: -1;
+	}
+}
+
+
+/* --- Back to top ---------------------------------------------------------
+ * Browse Baskets only, and it lives in that page's own content rather than in
+ * the footer template — nothing else on the site is long enough to need it, and
+ * a button that follows you down every page is noise.
+ *
+ * It fades in once the page has actually been scrolled, using a scroll-driven
+ * animation: no JavaScript, and no button hovering over the top of the page
+ * offering to take you where you already are. Where scroll timelines aren't
+ * supported yet — Firefox, at the time of writing — the animation simply never
+ * applies and the chevron is visible throughout, which is the old behaviour and
+ * perfectly usable.
+ *
+ * 44px square is the touch-target guidance, the same number the header's
+ * Instagram icon is padded out to.
+ * ---------------------------------------------------------------------- */
+.ht-to-top {
+	position: fixed;
+	right: var(--wp--preset--spacing--md);
+	bottom: var(--wp--preset--spacing--md);
+	z-index: 50; /* above the page, far below the navigation overlay at 100000 */
+	margin: 0;
+	line-height: 0;
+}
+
+.ht-to-top a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	border: 1px solid rgba(79, 99, 55, 0.28);
+	border-radius: 50%;
+	background-color: var(--wp--preset--color--cream);
+	box-shadow: var(--wp--preset--shadow--soft);
+	color: var(--wp--preset--color--green);
+	transition: background-color 150ms ease, color 150ms ease,
+		border-color 150ms ease;
+}
+
+.ht-to-top a:hover {
+	background-color: var(--wp--preset--color--green);
+	border-color: var(--wp--preset--color--green);
+	color: var(--wp--preset--color--cream);
+	text-decoration: none;
+}
+
+.ht-to-top a:focus-visible {
+	outline: 2px solid var(--wp--preset--color--green);
+	outline-offset: 3px;
+}
+
+.ht-to-top svg {
+	display: block;
+}
+
+@supports (animation-timeline: scroll()) {
+	/*
+	 * On the wrapper, not the link. The wrapper is the fixed box; hiding only
+	 * the link inside it leaves a 44px hole in the corner of the page that
+	 * swallows clicks without showing anything.
+	 */
+	.ht-to-top {
+		animation: ht-to-top-in linear both;
+		animation-timeline: scroll(root block);
+		animation-range: 20vh 60vh;
+	}
+
+	/*
+	 * Opacity and visibility only — no movement, so there's nothing here that
+	 * needs turning off for prefers-reduced-motion.
+	 *
+	 * The middle keyframe is load-bearing. Visibility doesn't interpolate like
+	 * other properties: the moment either end of an interval is `visible`, it is
+	 * visible for the whole interval. Animating straight from hidden to visible
+	 * therefore shows the element at the first pixel of scroll — invisible at
+	 * opacity 0, but still sitting there catching clicks in the corner. Holding
+	 * `hidden` across the first 40% keeps that interval hidden at both ends, so
+	 * it stays genuinely gone until the fade actually starts.
+	 */
+	@keyframes ht-to-top-in {
+		0% {
+			opacity: 0;
+			visibility: hidden;
+		}
+
+		40% {
+			opacity: 0;
+			visibility: hidden;
+		}
+
+		100% {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+}
+
+
+/* --- The link that closes a section -------------------------------------
+ * Each band on Browse Baskets ends with its own way in to the contact form,
+ * because the moment someone decides is the moment they've finished reading
+ * about their own occasion. Underlined by default rather than on hover: it's a
+ * call to action sitting on its own, and it should look like one before the
+ * pointer arrives.
+ * ---------------------------------------------------------------------- */
+.ht-more a {
+	text-decoration: underline;
+	text-underline-offset: 0.25em;
+	text-decoration-thickness: 1px;
+	text-decoration-color: rgba(79, 99, 55, 0.4);
+}
+
+.ht-more a:hover {
+	text-decoration-color: currentColor;
+}
+
+
+/* --- The enquiry form ----------------------------------------------------
+ * Rendered by the plugin's [happy_turtle_contact_form] shortcode, so it is
+ * plain HTML rather than blocks and has to be styled here. Everything below
+ * reads from the same theme.json presets as the rest of the site, so a palette
+ * or type change carries through without touching this block.
+ *
+ * The submit button carries .wp-element-button, which is the class WordPress
+ * generates the theme.json button styles against — so it matches every other
+ * button on the site rather than being a lookalike that drifts.
+ * ---------------------------------------------------------------------- */
+.ht-form__field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	margin: 0 0 var(--wp--preset--spacing--md);
+}
+
+.ht-form label {
+	font-family: var(--wp--preset--font-family--body);
+	font-size: var(--wp--preset--font-size--xs);
+	font-weight: 500;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--green-light);
+}
+
+.ht-form input,
+.ht-form select,
+.ht-form textarea {
+	width: 100%;
+	box-sizing: border-box;
+	font-family: var(--wp--preset--font-family--body);
+	font-size: var(--wp--preset--font-size--base);
+	line-height: 1.5;
+	color: var(--wp--preset--color--ink);
+	background-color: var(--wp--preset--color--white);
+	border: 1px solid rgba(79, 99, 55, 0.28);
+	border-radius: 2px;
+	padding: 0.7rem 0.85rem;
+}
+
+.ht-form textarea {
+	resize: vertical;
+}
+
+.ht-form input:focus-visible,
+.ht-form select:focus-visible,
+.ht-form textarea:focus-visible {
+	outline: 2px solid var(--wp--preset--color--green);
+	outline-offset: 1px;
+	border-color: transparent;
+}
+
+.ht-form__hint {
+	font-size: var(--wp--preset--font-size--xs);
+	line-height: 1.5;
+	color: var(--wp--preset--color--ink-soft);
+}
+
+.ht-form__req {
+	color: var(--wp--preset--color--green-light);
+}
+
+/*
+ * The honeypot. Off-screen rather than display:none — some bots skip anything
+ * that is genuinely hidden, and aria-hidden plus tabindex="-1" on the input
+ * already keep it away from screen readers and the keyboard.
+ */
+.ht-form__pot {
+	position: absolute !important;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+.ht-form__actions {
+	margin: 0;
+}
+
+.ht-form button.wp-element-button {
+	border: 0;
+	cursor: pointer;
+	font-family: var(--wp--preset--font-family--body);
+}
+
+.ht-form__note {
+	border-left: 3px solid var(--wp--preset--color--green-light);
+	padding: var(--wp--preset--spacing--sm) var(--wp--preset--spacing--md);
+	margin-bottom: var(--wp--preset--spacing--md);
+	font-size: var(--wp--preset--font-size--sm);
+	background-color: var(--wp--preset--color--sage-mist);
+}
+
+.ht-form__note--bad {
+	border-left-color: var(--wp--preset--color--ink);
+	background-color: var(--wp--preset--color--sand);
 }
 
 

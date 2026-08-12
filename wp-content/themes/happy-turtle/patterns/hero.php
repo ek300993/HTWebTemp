@@ -39,7 +39,7 @@ $ht_img = static function ( $file ) {
 
 <!-- wp:buttons {"style":{"spacing":{"margin":{"top":"var:preset|spacing|md"}}}} -->
 <div class="wp-block-buttons" style="margin-top:var(--wp--preset--spacing--md)"><!-- wp:button -->
-<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/shop/">Shop Gift Baskets</a></div>
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/browse-baskets/">Shop Gift Baskets</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons --></div>
 <!-- /wp:group --></div></div>

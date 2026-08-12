@@ -4,12 +4,16 @@
  * Slug: happy-turtle/featured-baskets
  * Categories: happy-turtle
  * Description: A self-updating row of the most recent baskets. Nothing to edit — add a basket and it appears here.
- * Keywords: baskets, products, query, latest, shop
+ * Keywords: baskets, products, query, latest, shop, gallery
  * Viewport Width: 1400
  *
  * This is the pattern that does the most work for the owner: it is a Query Loop
- * over the "basket" post type, so publishing a basket updates the homepage with
- * no page editing at all.
+ * over the "basket" post type, so publishing a basket updates the page with no
+ * page editing at all.
+ *
+ * It lives on the Gallery page rather than the homepage — the homepage sends
+ * people to Browse Baskets to pick an occasion, and the Gallery is where the
+ * actual work is shown.
  *
  * @package HappyTurtle
  */
@@ -21,7 +25,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"align":"center","textColor":"ink-soft","fontSize":"sm"} -->
-<p class="has-text-align-center has-ink-soft-color has-text-color has-sm-font-size">A few baskets from the studio. Every one is built to order — use these as a starting point for yours.</p>
+<p class="has-text-align-center has-ink-soft-color has-text-color has-sm-font-size">Here are a few baskets from the studio. Each one is customized and hand-selected to order — use these as a starting point for yours.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"align":"center","className":"is-style-heart-divider","style":{"spacing":{"margin":{"bottom":"var:preset|spacing|xl"}}}} -->

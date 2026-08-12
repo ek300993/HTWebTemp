@@ -20,6 +20,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Pages to create, in menu order.
  *
+ * The order here is the order of the menu. The header's Navigation block has no
+ * saved menu of its own, so it falls back to a Page List — which lists published
+ * pages by menu_order, and menu_order is set from this array. Reordering these
+ * entries on a fresh install reorders the menu; on a site that has already been
+ * set up, the owner reorders pages under Pages → Quick Edit → Order.
+ *
  * A note on templates. 'page-no-title' suppresses the title banner, so it is
  * only used where the page's own content already supplies an <h1> — the hero on
  * the homepage, the heading in the contact pattern. The other pages use the
@@ -33,19 +39,31 @@ function happy_turtle_starter_pages() {
 		array(
 			'slug'     => 'home',
 			'title'    => __( 'Home', 'happy-turtle' ),
-			'patterns' => array( 'hero', 'value-props', 'occasion-grid', 'featured-baskets', 'about-split', 'cta-banner' ),
+			'patterns' => array( 'hero', 'value-props', 'occasion-grid', 'about-split', 'cta-banner' ),
 			'template' => 'page-no-title', // Hero supplies the <h1>.
 		),
 		array(
 			'slug'     => 'about',
 			'title'    => __( 'About', 'happy-turtle' ),
-			'patterns' => array( 'about-split', 'cta-banner' ),
+			'patterns' => array( 'about-intro', 'about-personal', 'cta-banner' ),
+			'template' => '',
+		),
+		array(
+			'slug'     => 'browse-baskets',
+			'title'    => __( 'Browse Baskets', 'happy-turtle' ),
+			'patterns' => array( 'page-browse-baskets', 'cta-banner' ),
 			'template' => '',
 		),
 		array(
 			'slug'     => 'how-it-works',
 			'title'    => __( 'How It Works', 'happy-turtle' ),
 			'patterns' => array( 'how-it-works', 'cta-banner' ),
+			'template' => '',
+		),
+		array(
+			'slug'     => 'gallery',
+			'title'    => __( 'Gallery', 'happy-turtle' ),
+			'patterns' => array( 'gallery-intro', 'featured-baskets', 'gallery-baskets', 'gallery-items', 'cta-banner' ),
 			'template' => '',
 		),
 		array(
