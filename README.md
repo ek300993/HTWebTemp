@@ -11,7 +11,8 @@ browser, nothing to boot, nothing that can fail. Every page, every image, all
 the navigation.
 
 What it can't do, because it's static files: the block editor, the search box,
-and the order form. It's for looking at, not for trying.
+and the enquiry form — the form is on the Contact page and looks right, but a
+static file has nothing to post to. It's for looking at, not for trying.
 
 Rebuild it after content or design changes with `scripts/mirror.py` (crawls
 `localhost:8080` into `docs/`), then commit and push — Pages redeploys itself.
@@ -43,8 +44,8 @@ Two things to tell them:
 
 - Every visitor gets their own fresh copy, and changes vanish on reload. Nothing
   they do can break it, and nothing they type is saved.
-- The order form is a placeholder. It needs a form plugin, which is a hosting-time
-  decision (see "Deliberate omissions").
+- The enquiry form works, but Playground has no mail server, so a submission
+  reports success and goes nowhere.
 
 ### Regenerating the preview
 
@@ -82,6 +83,7 @@ wp-content/
 │   ├── patterns/                 every page section, as an editable pattern
 │   └── assets/images/            logo.png + placeholder.svg
 └── plugins/happy-turtle-gifts/   the Baskets post type + Occasions taxonomy
+    └── inc/contact-form.php      the enquiry form on the Contact page
 ```
 
 ## Installing
@@ -89,21 +91,30 @@ wp-content/
 1. Copy `wp-content/themes/happy-turtle` and
    `wp-content/plugins/happy-turtle-gifts` into the site's `wp-content`.
 2. **Activate the plugin first** (Plugins → Happy Turtle Gift Baskets). It
-   registers the Baskets post type and seeds the five occasions.
+   registers the Baskets post type, seeds the eight occasions, and adds the
+   enquiry form shortcode the Contact page depends on.
 3. Activate the theme (Appearance → Themes → Happy Turtle).
 4. Settings → Permalinks → Save once, to flush rewrite rules so `/shop/`,
    `/baskets/…` and `/occasion/…` resolve.
 5. Upload the logo (Appearance → Editor → click the header logo).
    `assets/images/logo.png` ships with the theme.
+6. Settings → General → **Gift basket enquiries** — the address the Contact form
+   delivers to. Left empty it falls back to the site admin address.
 
-Activating the theme runs a one-time setup that creates Home, About, How It
-Works, Reviews and Contact, fills the homepage with the section patterns, and
-sets it as the front page. Guarded by the `happy_turtle_setup_complete` option,
-so it never runs twice and never overwrites edited content. Delete that option
-to re-run it on a scratch install.
+Activating the theme runs a one-time setup that creates the seven pages — Home,
+About, Browse Baskets, How It Works, Gallery, Reviews, Contact — fills each with
+its section patterns, and sets Home as the front page. Guarded by the
+`happy_turtle_setup_complete` option, so it never runs twice and never overwrites
+edited content. Delete that option to re-run it on a scratch install.
+
+**The menu is the page list.** The header's Navigation block has no saved menu of
+its own, so it falls back to a Page List: every published page, in `menu_order`.
+That order is set by the array in `inc/setup-content.php` on first run, and after
+that it's Pages → Quick Edit → Order. Adding a page adds it to the menu; there is
+no separate menu to keep in sync, which is the point.
 
 Requires WordPress 6.6+ (the grid layout type) and PHP 7.4+. Verified against
-**WordPress 7.0.3 / PHP 8.3.33**.
+**WordPress 7.0.4 / PHP 8.3.33**.
 
 ## The content model
 
@@ -120,11 +131,39 @@ to forget.
 | Archive | `/shop/` |
 | Single | `/baskets/<slug>/` |
 | Taxonomy | `basket_occasion` — "Occasions", at `/occasion/<slug>/` |
-| Seeded occasions | For Teachers, Weddings, New Home, New Baby, Graduation, Thank You |
+| Seeded occasions | New Baby, New Home, Graduation, Weddings, Retirement, Birthday, For Teachers, Thinking of You |
 
-Graduation was added after looking at the supplied photography — two of the five
-sample shots are graduation baskets, so it is clearly a real line, and it wasn't
-in the original design's five tiles.
+Those eight are the studio's own list. Two arrived late — Birthday and Retirement
+— and "Thank You" became "Thinking of You", which the plugin's activation routine
+renames in place rather than adding alongside, so any basket already filed under
+it keeps its occasion.
+
+**Three places have to agree on the eight:** the taxonomy list in the plugin, the
+heading anchors in `patterns/page-browse-baskets.php`, and the tile links in
+`patterns/occasion-grid.php`. The Browse Baskets page is the one people see, so
+start there and work outwards.
+
+**Browse Baskets is a page, `/shop/` is the archive.** They do different jobs.
+Browse Baskets describes each kind of basket and what tends to go in one — it is
+written copy, always populated, and it's what the nav, the hero button and the
+occasion tiles point at. `/shop/` lists the baskets actually published, so it is
+only as full as the catalogue. It stays live and linked from search results and
+from an empty occasion archive, but nothing on the homepage sends people there
+any more. If the catalogue ever grows past a dozen baskets, promoting it back
+into the menu is a one-line change to `setup-content.php`.
+
+The occasion tiles on the homepage link to `/browse-baskets/#new-baby` and
+friends rather than to `/occasion/new-baby/`, because five of the eight occasions
+have no baskets published against them yet and an empty archive is a dead end.
+
+**Browse Baskets is eight full-bleed bands**, alternating cream/sand and photo
+left/right, each one a lead sentence, four "often includes" items set two-up, and
+its own link into the contact form. Three pieces of furniture carry the length:
+a row of jump-link pills under the intro, the alternating bands themselves, and a
+back-to-top chevron pinned bottom-right. The chevron fades in on scroll with a
+scroll-driven CSS animation — no JavaScript, and where scroll timelines aren't
+supported yet it simply stays visible throughout. All of it lives in the page's
+own content rather than the footer template, so it appears on that page only.
 
 **Baskets are a portfolio, not a product list.** Every order is custom, so the
 catalogue reads as examples of past work rather than things you can add to a
@@ -165,25 +204,57 @@ each section has one source of truth.
 
 | Locked (`templateLock: contentOnly`) | Unlocked |
 |---|---|
-| Hero, About split, CTA banner | Occasion grid, Featured baskets, Value props, How it works, Reviews |
+| Hero, About intro, About personal, About split, CTA banner | Occasion grid, Browse Baskets, Featured baskets, Gallery sections, Value props, How it works, Reviews, Contact |
 
 Locked sections expose only text and images — confirmed in the editor, where the
 hero's sidebar lists exactly Heading / Paragraph / Buttons / Image and no
 structural blocks. The unlocked ones are the sections the owner will legitimately
-want to extend. Remove the `"templateLock":"contentOnly"` attribute from a
-pattern's outer group to unlock it.
+want to extend: another occasion tile, another kind of basket, more photographs.
+Remove the `"templateLock":"contentOnly"` attribute from a pattern's outer group
+to unlock it.
 
 **Featured Baskets is a Query Loop**, not a hand-built grid. Publishing a basket
-puts it on the homepage with no page editing at all. Highest-value piece of the
-build for a non-technical owner.
+puts it on the Gallery page with no page editing at all. Highest-value piece of
+the build for a non-technical owner. It sat on the homepage until the Gallery
+page existed; the homepage now sends people to Browse Baskets to pick an occasion
+instead.
 
-## Deliberate omissions
+**The two gallery sections are core Gallery blocks.** Adding a photograph is
+select-the-gallery, press +, upload — no column count to retune and no half-empty
+row, because the block reflows itself. They ship with eight and six slots and are
+meant to grow to fifteen or twenty each.
 
-**The order form.** `patterns/page-contact.php` has a marked slot and nothing
-else. Spam filtering, file uploads and reliable delivery are the whole job of a
-form plugin. Install one (Fluent Forms and WPForms are both good) and drop its
-block in the slot. Check that **file upload is in the tier you pick** — customers
-sending reference photos matters here, and it's a paid feature in some plugins.
+## The enquiry form
+
+Four fields — email, phone, what they're after, and a message — on the Contact
+page, rendered by `[happy_turtle_contact_form]` from
+`plugins/happy-turtle-gifts/inc/contact-form.php`. It posts to `admin-post.php`
+and emails the result on, with the sender's address as `Reply-To` so a reply goes
+straight back to them.
+
+The "what are you after" menu is built from the Occasions taxonomy at render
+time, plus *An individual item*, *Bulk or corporate gifting* and *Something
+else* — so adding an occasion adds it to the form with no further work.
+
+Against spam: a nonce, a honeypot field only a bot fills in, and three
+submissions per email address per fifteen minutes. No captcha — that charges
+every real visitor for a problem this site doesn't have yet.
+
+**Two things to do at launch:**
+
+- Set the delivery address at Settings → General → *Gift basket enquiries*.
+- **Install an SMTP plugin.** Delivery is `wp_mail()`, which falls through to PHP
+  `mail()` unless something else is configured, and on a lot of shared hosting
+  that means spam folders or silent loss. WP Mail SMTP or Post SMTP, pointed at
+  the studio's own mailbox, takes ten minutes and is the difference between
+  enquiries arriving and not.
+
+**The upgrade path is still a form plugin** the day any of these matters: file
+uploads (customers sending reference photographs is the obvious one), conditional
+fields, or a stored record of every enquiry rather than just an email. Delete the
+shortcode block on the Contact page and drop the plugin's form block in its
+place; nothing else on the site depends on it. Check that **file upload is in the
+tier you pick** — it's a paid feature in some.
 
 ## Photography
 
@@ -196,11 +267,11 @@ install looks right immediately rather than showing a grid of empty boxes.
 | `hero-banner.jpg` | Hero, 1100px and up (built — see below) |
 | `hero-scene.jpg` | Hero, below 1100px (the same scene, unblended) |
 | `brand-card.jpg` | About section |
-| `new-home-welcome.jpg` | New Home tile, Housewarming Basket |
-| `new-baby-elephant.jpg` | New Baby tile |
-| `new-baby-letterboard.jpg` | Welcome Baby Basket |
-| `graduation-crate.jpg` | Graduation tile, Graduation Crate |
-| `graduation-class-2026.jpg` | Class of 2026 Basket |
+| `new-home-welcome.jpg` | New Home tile + row, Housewarming Basket, gallery |
+| `new-baby-elephant.jpg` | New Baby tile + row, gallery |
+| `new-baby-letterboard.jpg` | Welcome Baby Basket, gallery |
+| `graduation-crate.jpg` | Graduation tile + row, Graduation Crate, gallery |
+| `graduation-class-2026.jpg` | Class of 2026 Basket, gallery |
 
 `graduation-class-2026.jpg` had an "It's 🎓 season!!" Instagram text overlay baked
 into the original; the top 15% is cropped off in the web version. Use
@@ -280,13 +351,28 @@ site where changing a picture isn't just a click.
 portrait shot the banner was painted out from. Nothing on the site uses it now;
 it's kept because it's the source of record for the hero.
 
-For Teachers, Weddings and Thank You have no photograph yet and fall back to
-`placeholder.svg` — a warm neutral deliberately distinct from cream/sand/sage so
-the slot stays visible on every section background. Every tile image is pinned
-to a 4:3 `aspect-ratio` with `object-fit: cover`, so real photos and placeholders
-sit in an even row regardless of what gets uploaded. The hero's stacked phone
-photo is the exception at 4:5, because that picture is portrait and a landscape
-crop cut the top off the basket.
+**Everything else on the site is a placeholder slot**, and there are a lot of
+them now that the site has eight occasions, an About page and a gallery:
+
+| Slot | Where | Count |
+|---|---|---|
+| Teachers, Weddings, Birthday, Retirement | occasion tiles + Browse Baskets rows | 4 each, shared |
+| Thinking of You | Browse Baskets row | 1 |
+| A headshot | About → Nice to Meet You | 1, portrait 4:5 |
+| Joyce away from the studio | About → Personal Life | 1, portrait 4:5 |
+| More baskets | Gallery → The Baskets | 3 empty of 8 |
+| Individual items | Gallery → Individual Items | 6, all empty |
+
+They all fall back to `placeholder.svg` — a warm neutral deliberately distinct
+from cream/sand/sage so the slot stays visible on every section background. Tile
+and gallery images are pinned to a fixed `aspect-ratio` with `object-fit: cover`
+(4:3 for tiles and Browse Baskets rows, 1:1 in the galleries), so real photos and
+placeholders sit in an even row regardless of what gets uploaded. The two About
+portraits are 4:5, and the hero's stacked phone photo is 4:5 too, because that
+picture is portrait and a landscape crop cut the top off the basket.
+
+A real file rather than an empty image block, always: WordPress strips an `<img>`
+with no `src`, which collapses the column to nothing.
 
 The About section's image is on no ratio at all — it runs at the column's full
 width and its own natural height, uncropped. `brand-card.jpg` is a logo shot, so
@@ -318,8 +404,30 @@ matched by eye from the design mockup. Swap in `theme.json` →
 **Grid rows use `auto-fill`, not `auto-fit`.** WordPress preserves empty tracks,
 so a `minimumColumnWidth` that's too small leaves a gap at the end of a row. The
 values in the patterns are tuned so each row lands exactly at `wideSize` (1240px)
-— 5 occasion tiles in 5 columns, 4 baskets in 4. If you change the item count in
-a row, retune that width.
+— 7 occasion tiles at `9.5rem`, 4 process steps at `17rem`, 4 baskets at `16rem`.
+If you change the item count in a row, retune that width: the sum is
+`(items × width) + (gaps × blockGap) ≤ 1240px`, and one more column must not fit.
+
+The occasion row is the tight one. Seven tiles come out 157px wide on a desktop,
+which is small but legible; an eighth would need about 137px and start to look
+like a contact sheet. It's also why that row carries an explicit two-column rule
+below 600px — the column minimum small enough for seven across is small enough
+for a phone to fit exactly one, and seven full-width tiles is two and a half
+screens of scrolling.
+
+**The cover block's inner container moved under the theme in WordPress 7.0.4.**
+The rule that positions it went from two classes to five — core doubles
+`.has-custom-content-position` to buy specificity — and picked up `width: auto`
+along the way. Both halves broke the hero: shrink-to-fit plus a percentage-width
+child collapsed the copy into a narrow gutter, and the raised weight beat the
+theme's `margin-inline: auto`, so on a wide monitor the headline stopped lining
+up with the column every other section uses. `style.css` matches core's weight
+with the same doubled class and restores width, max-width and centring together.
+
+If the hero copy ever looks wrong after a WordPress update, that rule is the
+first place to look. The tell is `getComputedStyle` on
+`.wp-block-cover__inner-container`: it should report the wide size plus gutters,
+and an auto margin.
 
 **`main` uses flow layout, not constrained.** This is load-bearing, and it bit
 twice. Any constrained container wrapping `wp:post-content` caps post-content at
@@ -350,20 +458,34 @@ background that steps away from sand or leave the hairline alone.
 
 ## Verification status
 
-Ran against a real WordPress 7.0.3 install (SQLite, PHP 8.3.33). Confirmed:
+Ran against a real WordPress 7.0.4 install (SQLite, PHP 8.3.33). Confirmed:
 
-- All routes 200, unknown URLs 404, error log clean — no warnings, notices or fatals
-- All 13 PHP files lint clean
-- All 9 patterns parse and round-trip through `parse_blocks`/`serialize_blocks`
-- **86 blocks on the homepage, 0 invalid, 0 missing** in the actual block editor
-- Palette and font-size restrictions active; content-only locking active on the three intended sections
-- Responsive from 375px to 1440px with no horizontal overflow
+- All routes 200 (seven pages, the shop archive, occasion archives, basket
+  singles), unknown URLs 404, **error log completely empty** across a full sweep
+- All 20 PHP files lint clean
+- All 15 patterns register, parse, and round-trip through
+  `parse_blocks`/`serialize_blocks` with no drift on any of the seven pages
+- Menu renders in the intended order — Home · About · Browse Baskets · How It
+  Works · Gallery · Reviews · Contact — from page order alone
+- Enquiry form exercised end to end: valid submission delivers with the right
+  Reply-To; honeypot silently drops; bad nonce, bad email and bad request type
+  all rejected; off-site return URL falls back to the homepage; rate limit trips
+  on the fourth message
+- Responsive from 360px to 2560px with **no horizontal overflow on any page**,
+  and the occasion row stepping 2 → 3 → 4 → 5 → 7 columns as it widens
 
-Bugs found and fixed during that pass, all of which static checking had missed:
-constrained-`main` collapsing full-width sections to 760px; empty `<img>` tags
-being stripped entirely so hero/about columns rendered at 0 height; grid rows
-leaving empty trailing tracks; adjacent full-bleed sections separated by a
-blockGap stripe; and baskets recommending themselves under "You might also like".
+Bugs found and fixed during this pass, none of which static checking would have
+caught: the WordPress 7.0.4 cover-block change collapsing the hero copy into a
+narrow gutter and un-centring it on wide monitors; the seven-item menu no longer
+fitting beside the logo and needing the overlay breakpoint moved; and the
+occasion row's tuned column minimum leaving a phone with exactly one tile per
+row, seven rows deep.
+
+Earlier passes fixed, and these still hold: constrained-`main` collapsing
+full-width sections to 760px; empty `<img>` tags being stripped entirely so
+columns rendered at 0 height; grid rows leaving empty trailing tracks; adjacent
+full-bleed sections separated by a blockGap stripe; and baskets recommending
+themselves under "You might also like".
 
 `scratchpad/validate.py` statically checks attribute JSON, delimiter balance and
 preset references if you edit markup by hand rather than through the editor.
