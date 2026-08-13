@@ -1,12 +1,12 @@
 <?php
 /**
- * The enquiry form.
+ * The inquiry form.
  *
  * Four fields — email, phone, what they're after, and a message — posted to
  * admin-post.php and emailed on. It lives in the plugin rather than the theme so
  * it survives a re-theme, and it is deliberately small: a full form plugin
  * (Fluent Forms, WPForms) is still the right answer the day file uploads,
- * conditional fields or a stored record of every enquiry are wanted. This covers
+ * conditional fields or a stored record of every inquiry are wanted. This covers
  * the one job the site can't launch without.
  *
  * What it does about spam: a nonce, a honeypot field that only a bot fills in,
@@ -27,9 +27,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 /**
- * Where enquiries are sent.
+ * Where inquiries are sent.
  *
- * Settings → General → "Gift basket enquiries", falling back to the site admin
+ * Settings → General → "Gift basket inquiries", falling back to the site admin
  * address so the form can never silently post into a void.
  *
  * @return string
@@ -43,7 +43,7 @@ function happy_turtle_contact_recipient() {
 	}
 
 	/**
-	 * Filter the address enquiries are delivered to.
+	 * Filter the address inquiries are delivered to.
 	 *
 	 * @param string $address Email address.
 	 */
@@ -87,7 +87,7 @@ function happy_turtle_contact_request_types() {
 
 
 /**
- * Render the enquiry form.
+ * Render the inquiry form.
  *
  * Used as [happy_turtle_contact_form], which is what sits in the contact
  * pattern. A shortcode rather than a block: it can be moved, duplicated or
@@ -186,7 +186,7 @@ function happy_turtle_contact_bounce( $status, $return ) {
 
 
 /**
- * Handle a submitted enquiry.
+ * Handle a submitted inquiry.
  */
 function happy_turtle_contact_submit() {
 
@@ -220,7 +220,7 @@ function happy_turtle_contact_submit() {
 		happy_turtle_contact_bounce( 'invalid', $return );
 	}
 
-	// Three in fifteen minutes from one address is plenty for a real enquiry.
+	// Three in fifteen minutes from one address is plenty for a real inquiry.
 	$key   = 'ht_contact_' . md5( $email );
 	$count = (int) get_transient( $key );
 
@@ -231,15 +231,15 @@ function happy_turtle_contact_submit() {
 	set_transient( $key, $count + 1, 15 * MINUTE_IN_SECONDS );
 
 	$subject = sprintf(
-		/* translators: %s: the kind of enquiry, e.g. New Baby. */
-		__( 'Website enquiry — %s', 'happy-turtle-gifts' ),
+		/* translators: %s: the kind of inquiry, e.g. New Baby. */
+		__( 'Website inquiry — %s', 'happy-turtle-gifts' ),
 		$types[ $type ]
 	);
 
 	$body = implode(
 		"\n",
 		array(
-			__( 'A new enquiry from the website.', 'happy-turtle-gifts' ),
+			__( 'A new inquiry from the website.', 'happy-turtle-gifts' ),
 			'',
 			__( 'Email:', 'happy-turtle-gifts' ) . ' ' . $email,
 			__( 'Phone:', 'happy-turtle-gifts' ) . ' ' . ( $phone ? $phone : __( 'not given', 'happy-turtle-gifts' ) ),
@@ -271,7 +271,7 @@ add_action( 'admin_post_happy_turtle_contact', 'happy_turtle_contact_submit' );
 
 
 /**
- * A place to set the enquiry address without editing code.
+ * A place to set the inquiry address without editing code.
  *
  * Settings → General, under the site's own email address, because that is where
  * someone goes looking for it.
@@ -291,7 +291,7 @@ function happy_turtle_contact_setting() {
 
 	add_settings_field(
 		'happy_turtle_contact_email',
-		__( 'Gift basket enquiries', 'happy-turtle-gifts' ),
+		__( 'Gift basket inquiries', 'happy-turtle-gifts' ),
 		'happy_turtle_contact_setting_field',
 		'general',
 		'default'
@@ -310,8 +310,8 @@ function happy_turtle_contact_setting_field() {
 	<p class="description">
 		<?php
 		printf(
-			/* translators: %s: the address currently receiving enquiries. */
-			esc_html__( 'Where the enquiry form on the Contact page delivers. Currently going to %s.', 'happy-turtle-gifts' ),
+			/* translators: %s: the address currently receiving inquiries. */
+			esc_html__( 'Where the inquiry form on the Contact page delivers. Currently going to %s.', 'happy-turtle-gifts' ),
 			'<code>' . esc_html( happy_turtle_contact_recipient() ) . '</code>'
 		);
 		?>

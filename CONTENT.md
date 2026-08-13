@@ -33,7 +33,7 @@ way in both places. The old invented "proofed within 1–2 days" is gone.
 ### ~~Prices~~ — removed
 
 Resolved. The invented size-and-price list is off every basket page and out of
-the editor skeleton. Pricing is handled per enquiry now, which is what the rest
+the editor skeleton. Pricing is handled per inquiry now, which is what the rest
 of the site already said: every basket is custom and quoted individually.
 
 ### What went inside each basket — invented
@@ -309,7 +309,7 @@ so hitting Reply goes straight back to them. No plugin needed.
 
 Two things about it:
 
-- **Set where it sends** at Settings → General → *Gift basket enquiries*, and
+- **Set where it sends** at Settings → General → *Gift basket inquiries*, and
   send yourself a test message before launch.
 - **It can't take photo uploads.** If you want customers attaching reference
   pictures, that needs a form plugin — a small job, and the rest of the page

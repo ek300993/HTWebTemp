@@ -3,14 +3,14 @@
  * Title: Contact — Start an Order
  * Slug: happy-turtle/page-contact
  * Categories: happy-turtle
- * Description: Contact page with email, phone and the enquiry form.
- * Keywords: contact, order, form, enquiry, get in touch, email, phone
+ * Description: Contact page with email, phone and the inquiry form.
+ * Keywords: contact, order, form, inquiry, get in touch, email, phone
  * Viewport Width: 1400
  *
  * The form itself is [happy_turtle_contact_form], rendered by the Happy Turtle
  * Gift Baskets plugin. Four fields, a nonce, a honeypot and a rate limit; it
  * emails on to whatever address is set at Settings → General → "Gift basket
- * enquiries". If the shortcode ever shows as plain text on the page, the plugin
+ * inquiries". If the shortcode ever shows as plain text on the page, the plugin
  * has been deactivated.
  *
  * A form plugin is still the upgrade path the day file uploads matter —

@@ -625,7 +625,7 @@ mark.has-inline-color {
 
 /* --- Anchored headings ---------------------------------------------------
  * The occasion tiles and the Browse Baskets jump links both land on a heading,
- * and the enquiry form returns to its own anchor after sending. Without a
+ * and the inquiry form returns to its own anchor after sending. Without a
  * scroll margin the target lands hard against the top of the window with no air
  * above it — and on Browse Baskets it would sit above the top edge of its own
  * coloured band, which reads as landing in the wrong section.
@@ -855,7 +855,7 @@ mark.has-inline-color {
 }
 
 
-/* --- The enquiry form ----------------------------------------------------
+/* --- The inquiry form ----------------------------------------------------
  * Rendered by the plugin's [happy_turtle_contact_form] shortcode, so it is
  * plain HTML rather than blocks and has to be styled here. Everything below
  * reads from the same theme.json presets as the rest of the site, so a palette

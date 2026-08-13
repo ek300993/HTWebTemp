@@ -11,10 +11,10 @@ comes out looking right.
 
 1. **Check your logo.** Appearance → Editor → click the header → click the logo
    to replace it. It appears in the header and the footer.
-2. **Tell the enquiry form where to send.** Settings → General → **Gift basket
-   enquiries** — put the email address you actually read in there. Then send
+2. **Tell the inquiry form where to send.** Settings → General → **Gift basket
+   inquiries** — put the email address you actually read in there. Then send
    yourself a test message from the Contact page to make sure it arrives (check
-   your spam folder too; see "Your enquiry form" below).
+   your spam folder too; see "Your inquiry form" below).
 3. **Add your photos.** Every grey box with a little picture icon is an empty
    image — click it, upload, done. There are a lot of them waiting: four occasion
    tiles on the home page, most of the rows on Browse Baskets, two photos of you
@@ -50,7 +50,7 @@ it's an example rather than something to order exactly. So don't worry about
 listing a basket you can't repeat item for item; that's the point of showing it.
 
 **There are no prices on the site**, for the same reason — you quote each
-enquiry yourself. If you ever want a price on a basket page, type it into the
+inquiry yourself. If you ever want a price on a basket page, type it into the
 basket like any other text.
 
 To add a new occasion: Baskets → Occasions.
@@ -92,7 +92,7 @@ at the top of the page.
 | **How It Works** | The four steps, from first form to handing it over |
 | **Gallery** | Recently Made (fills itself), then two photo galleries |
 | **Reviews** | Six of your Google reviews |
-| **Contact** | Your email and phone, and the enquiry form |
+| **Contact** | Your email and phone, and the inquiry form |
 
 **The menu is just your pages, in order.** Add a page and it appears in the menu.
 To move one, Pages → hover it → Quick Edit → **Order** (lower numbers come
@@ -114,19 +114,19 @@ half-empty row. Fifteen or twenty in each is a good target; more is fine.
 
 ---
 
-## Your enquiry form
+## Your inquiry form
 
 The Contact page has a working form: email, phone, what they're after, and a
 message. When somebody sends one it arrives in your inbox, and hitting Reply
 goes straight back to them.
 
-**Where it sends:** Settings → General → **Gift basket enquiries**.
+**Where it sends:** Settings → General → **Gift basket inquiries**.
 
 **Test it before you tell anyone about the site.** Fill it in yourself and check
 the message actually arrives. Website email is the one thing that quietly fails
 on some hosting — if it doesn't turn up, or it lands in spam, ask whoever set the
 site up to install an SMTP plugin. It's a ten-minute job and it's worth doing at
-launch rather than after a customer's enquiry goes missing.
+launch rather than after a customer's inquiry goes missing.
 
 **What it doesn't do:** photo uploads. If you want customers sending reference
 pictures through the form, that needs a form plugin — a small job for a

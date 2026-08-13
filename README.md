@@ -11,7 +11,7 @@ browser, nothing to boot, nothing that can fail. Every page, every image, all
 the navigation.
 
 What it can't do, because it's static files: the block editor, the search box,
-and the enquiry form — the form is on the Contact page and looks right, but a
+and the inquiry form — the form is on the Contact page and looks right, but a
 static file has nothing to post to. It's for looking at, not for trying.
 
 Rebuild it after content or design changes with `scripts/mirror.py` (crawls
@@ -44,7 +44,7 @@ Two things to tell them:
 
 - Every visitor gets their own fresh copy, and changes vanish on reload. Nothing
   they do can break it, and nothing they type is saved.
-- The enquiry form works, but Playground has no mail server, so a submission
+- The inquiry form works, but Playground has no mail server, so a submission
   reports success and goes nowhere.
 
 ### Regenerating the preview
@@ -83,7 +83,7 @@ wp-content/
 │   ├── patterns/                 every page section, as an editable pattern
 │   └── assets/images/            logo.png + placeholder.svg
 └── plugins/happy-turtle-gifts/   the Baskets post type + Occasions taxonomy
-    └── inc/contact-form.php      the enquiry form on the Contact page
+    └── inc/contact-form.php      the inquiry form on the Contact page
 ```
 
 ## Installing
@@ -92,13 +92,13 @@ wp-content/
    `wp-content/plugins/happy-turtle-gifts` into the site's `wp-content`.
 2. **Activate the plugin first** (Plugins → Happy Turtle Gift Baskets). It
    registers the Baskets post type, seeds the eight occasions, and adds the
-   enquiry form shortcode the Contact page depends on.
+   inquiry form shortcode the Contact page depends on.
 3. Activate the theme (Appearance → Themes → Happy Turtle).
 4. Settings → Permalinks → Save once, to flush rewrite rules so `/shop/`,
    `/baskets/…` and `/occasion/…` resolve.
 5. Upload the logo (Appearance → Editor → click the header logo).
    `assets/images/logo.png` ships with the theme.
-6. Settings → General → **Gift basket enquiries** — the address the Contact form
+6. Settings → General → **Gift basket inquiries** — the address the Contact form
    delivers to. Left empty it falls back to the site admin address.
 
 Activating the theme runs a one-time setup that creates the seven pages — Home,
@@ -177,7 +177,7 @@ together or the site starts making promises it can't keep:
 
 **No prices anywhere on the site.** No price meta field, no price list in the
 basket skeleton — since there's no checkout and every basket is quoted
-individually, pricing is handled in the reply to an enquiry. If prices are ever
+individually, pricing is handled in the reply to an inquiry. If prices are ever
 wanted back, they go in the basket body as an ordinary list; nothing in the
 theme or plugin needs to change.
 
@@ -224,7 +224,7 @@ select-the-gallery, press +, upload — no column count to retune and no half-em
 row, because the block reflows itself. They ship with eight and six slots and are
 meant to grow to fifteen or twenty each.
 
-## The enquiry form
+## The inquiry form
 
 Four fields — email, phone, what they're after, and a message — on the Contact
 page, rendered by `[happy_turtle_contact_form]` from
@@ -242,16 +242,16 @@ every real visitor for a problem this site doesn't have yet.
 
 **Two things to do at launch:**
 
-- Set the delivery address at Settings → General → *Gift basket enquiries*.
+- Set the delivery address at Settings → General → *Gift basket inquiries*.
 - **Install an SMTP plugin.** Delivery is `wp_mail()`, which falls through to PHP
   `mail()` unless something else is configured, and on a lot of shared hosting
   that means spam folders or silent loss. WP Mail SMTP or Post SMTP, pointed at
   the studio's own mailbox, takes ten minutes and is the difference between
-  enquiries arriving and not.
+  inquiries arriving and not.
 
 **The upgrade path is still a form plugin** the day any of these matters: file
 uploads (customers sending reference photographs is the obvious one), conditional
-fields, or a stored record of every enquiry rather than just an email. Delete the
+fields, or a stored record of every inquiry rather than just an email. Delete the
 shortcode block on the Contact page and drop the plugin's form block in its
 place; nothing else on the site depends on it. Check that **file upload is in the
 tier you pick** — it's a paid feature in some.
@@ -467,7 +467,7 @@ Ran against a real WordPress 7.0.4 install (SQLite, PHP 8.3.33). Confirmed:
   `parse_blocks`/`serialize_blocks` with no drift on any of the seven pages
 - Menu renders in the intended order — Home · About · Browse Baskets · How It
   Works · Gallery · Reviews · Contact — from page order alone
-- Enquiry form exercised end to end: valid submission delivers with the right
+- Inquiry form exercised end to end: valid submission delivers with the right
   Reply-To; honeypot silently drops; bad nonce, bad email and bad request type
   all rejected; off-site return URL falls back to the homepage; rate limit trips
   on the fourth message

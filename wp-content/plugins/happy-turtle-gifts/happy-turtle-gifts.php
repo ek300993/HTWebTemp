@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Happy Turtle Gift Baskets
- * Description:       Adds the gift basket catalogue — a Baskets post type and Occasions taxonomy — and the enquiry form on the Contact page. Lives in a plugin rather than the theme on purpose: if the site is ever re-themed, the baskets stay put.
+ * Description:       Adds the gift basket catalogue — a Baskets post type and Occasions taxonomy — and the inquiry form on the Contact page. Lives in a plugin rather than the theme on purpose: if the site is ever re-themed, the baskets stay put.
  * Version:           1.2.0
  * Requires at least: 6.6
  * Requires PHP:      7.4
