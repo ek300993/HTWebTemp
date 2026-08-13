@@ -67,9 +67,6 @@ if ( $logo ) {
 }
 
 // --- Baskets --------------------------------------------------------------
-$sizes = '<!-- wp:heading {"fontSize":"lg"} --><h2 class="wp-block-heading has-lg-font-size">Size &amp; Price Guide</h2><!-- /wp:heading -->'
-	. '<!-- wp:list --><ul class="wp-block-list"><li>Small — from $65</li><li>Medium — from $95</li><li>Large — from $130</li></ul><!-- /wp:list -->';
-
 $baskets = array(
 	array(
 		'title'    => 'Welcome Baby Basket',
@@ -131,8 +128,7 @@ foreach ( $baskets as $b ) {
 
 	$content = '<!-- wp:paragraph --><p>' . $b['intro'] . '</p><!-- /wp:paragraph -->'
 		. '<!-- wp:heading {"fontSize":"lg"} --><h2 class="wp-block-heading has-lg-font-size">What Went Inside</h2><!-- /wp:heading -->'
-		. '<!-- wp:list --><ul class="wp-block-list">' . $list . '</ul><!-- /wp:list -->'
-		. $sizes;
+		. '<!-- wp:list --><ul class="wp-block-list">' . $list . '</ul><!-- /wp:list -->';
 
 	$id = wp_insert_post(
 		array(

@@ -38,8 +38,7 @@ comes out looking right.
 - **Excerpt** (right-hand sidebar) — one short line, e.g. "For a brand new front
   door". This shows under the photo in grids, so keep it to a few words.
 - **The main area** — already set up with what each basket needs: a short
-  description, a **What Went Inside** list, and a **Size & Price Guide**. Just
-  fill them in.
+  description and a **What Went Inside** list. Just fill them in.
 
 Hit Publish and it appears automatically on the shop archive, in its occasion,
 and in the "Recently Made" row on your Gallery page. **You never have to edit a
@@ -49,7 +48,10 @@ page to add a basket.**
 that every basket is custom — the shop page says so, and each basket page says
 it's an example rather than something to order exactly. So don't worry about
 listing a basket you can't repeat item for item; that's the point of showing it.
-Prices are worded "from £X" for the same reason.
+
+**There are no prices on the site**, for the same reason — you quote each
+enquiry yourself. If you ever want a price on a basket page, type it into the
+basket like any other text.
 
 To add a new occasion: Baskets → Occasions.
 

@@ -72,8 +72,8 @@ function happy_turtle_register_basket_post_type() {
 			/*
 			 * A starting skeleton in the editor. Baskets are a portfolio of past
 			 * work rather than a fixed product list — every order is custom — so
-			 * the headings are worded as a record of what went into one, with
-			 * prices shown as a guide. Not locked: blocks can be added or removed.
+			 * the headings are worded as a record of what went into one, and no
+			 * prices are shown. Not locked: blocks can be added or removed.
 			 */
 			'template'      => array(
 				array(
@@ -97,21 +97,6 @@ function happy_turtle_register_basket_post_type() {
 					),
 					array(
 						array( 'core/list-item', array( 'placeholder' => __( 'First item…', 'happy-turtle-gifts' ) ) ),
-					),
-				),
-				array(
-					'core/heading',
-					array(
-						'level'    => 2,
-						'content'  => __( 'Size &amp; Price Guide', 'happy-turtle-gifts' ),
-						'fontSize' => 'lg',
-					),
-				),
-				array(
-					'core/list',
-					array(),
-					array(
-						array( 'core/list-item', array( 'placeholder' => __( 'Small — from £00', 'happy-turtle-gifts' ) ) ),
 					),
 				),
 			),

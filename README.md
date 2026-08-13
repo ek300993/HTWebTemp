@@ -121,9 +121,8 @@ Requires WordPress 6.6+ (the grid layout type) and PHP 7.4+. Verified against
 **Baskets** are a custom post type registered in the *plugin*, not the theme, so
 they survive a future re-theme. Each basket has a photo, an excerpt (the one-line
 teaser in grids), occasions, and a body. New baskets open with a pre-built
-skeleton — description, **What's Inside** list, **Sizes & Pricing** list —
-because those are the two things every basket needs and the two things easiest
-to forget.
+skeleton — description and a **What Went Inside** list — because that's what
+every basket page needs and what's easiest to forget.
 
 | | |
 |---|---|
@@ -174,12 +173,13 @@ together or the site starts making promises it can't keep:
 - Single basket CTA is "Request a Basket Like This", not "Order"
 - The note under it says plainly that it's an example, not a fixed product
 - Related row is "More baskets I've made"
-- Editor headings are "What Went Inside" and "Size & Price Guide", with prices
-  worded "from £X"
+- The only editor heading is "What Went Inside"
 
-No custom price meta field. Pricing lives in the basket body — since there's no
-checkout and every basket is quoted individually, structured price data buys
-nothing and would cost a custom block to display.
+**No prices anywhere on the site.** No price meta field, no price list in the
+basket skeleton — since there's no checkout and every basket is quoted
+individually, pricing is handled in the reply to an enquiry. If prices are ever
+wanted back, they go in the basket body as an ordinary list; nothing in the
+theme or plugin needs to change.
 
 ## How the design is wired
 

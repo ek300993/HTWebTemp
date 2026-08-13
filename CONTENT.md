@@ -30,13 +30,11 @@ Resolved. Your "1-2 week minimum, depending on the level of customization
 required" appears on How It Works and again on the Contact page, worded the same
 way in both places. The old invented "proofed within 1–2 days" is gone.
 
-### Prices — invented
+### ~~Prices~~ — removed
 
-Every basket currently reads Small from $65 / Medium from $95 / Large from $130.
-I made those numbers up entirely.
-
-**Need from you:** your actual size tiers and starting prices, or tell me to
-remove pricing from the site and handle it per-enquiry.
+Resolved. The invented size-and-price list is off every basket page and out of
+the editor skeleton. Pricing is handled per enquiry now, which is what the rest
+of the site already said: every basket is custom and quoted individually.
 
 ### What went inside each basket — invented
 
@@ -285,7 +283,7 @@ Once you have a dozen baskets up it's worth putting back in the menu.
 
 | Where | Current text | |
 |---|---|---|
-| Headings | What Went Inside · Size & Price Guide | Draft |
+| Heading | What Went Inside | Draft |
 | Button | Request a Basket Like This | Draft |
 | Note under button | This is an example of a basket I've made, not a fixed product. Yours will be built around the occasion, any allergies or preferences, and your budget — tell me what you have in mind and I'll put a line-up together before anything is packed. | Draft |
 | Related heading | More baskets I've made | Draft |
@@ -351,5 +349,5 @@ If you only do three things:
 1. **Send the two photos of you** — the About page is written and waiting on them
 2. **Send basket photos for Teachers, Weddings, Birthday, Retirement and
    Thinking of You** — five grey boxes, four of them on the home page
-3. **Confirm your real prices**, and read the eight category descriptions on
-   Browse Baskets
+3. **Read the eight category descriptions** on Browse Baskets and tell me
+   what's wrong with them

@@ -71,7 +71,7 @@ kids.push(new Paragraph({
   children: [new TextRun({ text: "One thing to read first", bold: true, size: 22 })],
 }));
 kids.push(body("Some of what's on the site now is content I invented so the pages weren't empty. It reads as real, so it can't stay. Anything invented is marked in red italics below."));
-kids.push(body("Invented, and still needing your words: all prices, all basket contents, the turnaround times, and the basket names."));
+kids.push(body("Invented, and still needing your words: all basket contents, the turnaround times, and the basket names."));
 kids.push(body("The reviews are real. Six have been taken from your Google listing and quoted word for word — nothing reworded."));
 
 kids.push(rule());
@@ -206,13 +206,12 @@ kids.push(rule());
 kids.push(H1("An individual basket page"));
 kids.push(note("The wording below is fixed and appears on every basket page."));
 kids.push(...item("Section heading", "What Went Inside"));
-kids.push(...item("Section heading", "Size & Price Guide"));
 kids.push(...item("Button", "Request a Basket Like This"));
 kids.push(...item("Note under the button", "This is an example of a basket I've made, not a fixed product. Yours will be built around the occasion, any allergies or preferences, and your budget — tell me what you have in mind and I'll put a line-up together before anything is packed."));
 kids.push(...item("Heading above the related baskets", "More baskets I've made"));
 
 kids.push(H2("The five baskets currently on the site"));
-kids.push(flag("Every name, description, contents list and price below is invented. I wrote them from looking at your photographs. Please replace with the real details, or tell me which baskets to show instead."));
+kids.push(flag("Every name, description and contents list below is invented. I wrote them from looking at your photographs. Please replace with the real details, or tell me which baskets to show instead."));
 
 const baskets = [
   ["Welcome Baby Basket", "For the whole new family",
@@ -241,8 +240,6 @@ baskets.forEach(([name, excerpt, intro, items]) => {
   kids.push(...item("Description", intro));
   kids.push(label("What went inside"));
   items.forEach((i) => kids.push(bullet(i)));
-  kids.push(label("Size & price guide"));
-  ["Small — from $65", "Medium — from $95", "Large — from $130"].forEach((p) => kids.push(bullet(p)));
 });
 
 kids.push(rule());
